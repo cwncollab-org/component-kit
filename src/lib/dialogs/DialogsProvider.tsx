@@ -104,6 +104,7 @@ export function DialogsProvider({ children }: PropsWithChildren) {
                 },
               },
             }}
+            closeAfterTransition={false}
             {...dialog.props}
           />
         ))}
