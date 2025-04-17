@@ -15,7 +15,6 @@
   ],
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build && tsc -p tsconfig.build.json",
     "build:lib": "tsc -p tsconfig.build.json",
     "lint": "eslint .",
     "preview": "vite preview",
