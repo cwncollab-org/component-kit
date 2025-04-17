@@ -2,55 +2,6 @@
 
 A React component library built with TypeScript and Vite.
 
-## Development
-
-To run the project in development mode:
-
-1. Install dependencies:
-```bash
-npm install
-```
-
-2. Start the development server:
-```bash
-npm run dev
-```
-
-This will start a local development server with hot module replacement (HMR) enabled.
-
-## Building for Production
-
-To build the library for production:
-
-```bash
-npm run build
-```
-
-This command will:
-1. Build the TypeScript files
-2. Bundle the components using Vite
-3. Generate type definitions
-
-## Publishing to npm
-
-Before publishing, make sure you:
-1. Have an npm account
-2. Are logged in to npm (`npm login`)
-3. Have updated the version number in `package.json`
-
-To publish the package:
-
-```bash
-npm publish --access public
-```
-
-## Project Structure
-
-- `src/` - Source code directory
-- `lib/` - Built files (generated)
-- `public/` - Static assets
-- `vite.config.ts` - Vite configuration
-- `tsconfig.json` - TypeScript configuration
 
 ## Usage Examples
 
@@ -76,8 +27,31 @@ function AppPage() {
       variant='contained'
       onClick={() => openDialog('example-dialog', ExampleDialog)}
     >
-      Open Dialog
+      Open Basic Dialog
     </Button>
+  )
+}
+```
+
+#### ExampleDialog Implementation
+
+```tsx
+import {
+  Dialog,
+  DialogTitle,
+  DialogContentText,
+  DialogContent,
+  DialogProps,
+} from '@mui/material'
+
+export default function ExampleDialog({ open, onClose, ...rest }: DialogProps) {
+  return (
+    <Dialog open={open} onClose={onClose} {...rest}>
+      <DialogTitle>Example Dialog</DialogTitle>
+      <DialogContent>
+        <DialogContentText>This is an example dialog</DialogContentText>
+      </DialogContent>
+    </Dialog>
   )
 }
 ```
@@ -97,21 +71,55 @@ function AppPage() {
       <Input
         value={name}
         onChange={e => setName(e.target.value)}
-        placeholder='Name'
+        placeholder='Enter your name'
       />
       <Button
         variant='contained'
-        onClick={async () => {
-          await openDialog(
+        onClick={() => {
+          openDialog(
             'example-dialog-with-payload',
             ExampleDialogWithPayload,
             { payload: { name } }
           )
         }}
       >
-        Open Dialog
+        Open Dialog with Payload
       </Button>
     </>
+  )
+}
+```
+
+#### ExampleDialogWithPayload Implementation
+
+```tsx
+import {
+  Dialog,
+  DialogTitle,
+  DialogContentText,
+  DialogContent,
+} from '@mui/material'
+import { DialogProps } from '../lib'
+
+type Payload = {
+  name: string
+}
+
+export default function ExampleDialogWithPayload({
+  open,
+  onClose,
+  payload,
+  ...rest
+}: DialogProps<Payload>) {
+  return (
+    <Dialog open={open} onClose={onClose} {...rest}>
+      <DialogTitle>Example Dialog</DialogTitle>
+      <DialogContent>
+        <DialogContentText>
+          This is an example dialog with payload {JSON.stringify(payload)}
+        </DialogContentText>
+      </DialogContent>
+    </Dialog>
   )
 }
 ```
@@ -124,7 +132,7 @@ import ExampleDialogWithResult from './examples/ExampleDialogWithResult'
 
 function AppPage() {
   const { openDialog } = useDialogs()
-  const [result, setResult] = useState('')
+  const [result, setResult] = useState<{ name: string } | null>(null)
 
   return (
     <>
@@ -133,17 +141,71 @@ function AppPage() {
         onClick={async () => {
           const result = await openDialog(
             'example-dialog-with-result',
-            ExampleDialogWithResult
+            ExampleDialogWithResult,
+            { payload: { name: 'Initial Name' } }
           )
-          setResult(JSON.stringify(result))
+          if (result?.success) {
+            setResult(result.data)
+          }
         }}
       >
-        Open Dialog
+        Open Dialog with Result
       </Button>
-      <Typography variant='body1'>
-        Result: {result}
-      </Typography>
+      {result && (
+        <Typography variant='body1'>
+          Result: {result.name}
+        </Typography>
+      )}
     </>
+  )
+}
+```
+
+#### ExampleDialogWithResult Implementation
+
+```tsx
+import {
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  Input,
+  DialogActions,
+  Button,
+} from '@mui/material'
+import { DialogProps } from '../lib'
+import { useState } from 'react'
+
+type Payload = {
+  name: string
+}
+
+type ResultData = {
+  name: string
+}
+
+export default function ExampleDialogWithResult({
+  open,
+  onClose,
+  payload,
+  ...rest
+}: DialogProps<Payload, ResultData>) {
+  const [name, setName] = useState(payload?.name || '')
+  return (
+    <Dialog open={open} onClose={onClose} {...rest}>
+      <DialogTitle>Example Dialog</DialogTitle>
+      <DialogContent>
+        <Input
+          value={name}
+          onChange={e => setName(e.target.value)}
+          placeholder='Name'
+        />
+      </DialogContent>
+      <DialogActions>
+        <Button onClick={ev => onClose(ev, { success: true, data: { name } })}>
+          Save
+        </Button>
+      </DialogActions>
+    </Dialog>
   )
 }
 ```
@@ -164,8 +226,35 @@ function AppPage() {
       variant='contained'
       onClick={() => openDialog('example-dialog2', ExampleDialog2)}
     >
-      Open Dialog
+      Open Lazy Loaded Dialog
     </Button>
+  )
+}
+```
+
+#### ExampleDialog2 Implementation
+
+```tsx
+import {
+  Dialog,
+  DialogTitle,
+  DialogContentText,
+  DialogContent,
+  DialogProps,
+} from '@mui/material'
+
+export default function ExampleDialog2({
+  open,
+  onClose,
+  ...rest
+}: DialogProps) {
+  return (
+    <Dialog open={open} onClose={onClose} {...rest}>
+      <DialogTitle>Example Dialog</DialogTitle>
+      <DialogContent>
+        <DialogContentText>This is an example dialog 2</DialogContentText>
+      </DialogContent>
+    </Dialog>
   )
 }
 ```
@@ -175,6 +264,7 @@ function AppPage() {
 This package requires:
 - React ^19.0.0
 - React DOM ^19.0.0
+- @mui/material ^5.0.0
 
 ## Development Dependencies
 
