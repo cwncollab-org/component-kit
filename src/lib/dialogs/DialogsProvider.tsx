@@ -94,7 +94,7 @@ export function DialogsProvider({ children }: PropsWithChildren) {
             key={dialog.id}
             open={dialog.open}
             onClose={(
-              ev: {},
+              _,
               result: DialogResult<unknown> | 'backdropClick' | 'escapeKeyDown'
             ) => handleCloseWithResult(dialog.key, result)}
             slotProps={{
