@@ -1,7 +1,13 @@
 # Component Kit
 
-A React component library built with TypeScript and Vite.
+A React component library built with TypeScript and Vite. This package provides a set of reusable components built on top of [Material-UI (MUI)](https://mui.com/) and [Tanstack Form](https://tanstack.com/form/latest) for form handling.
 
+## Features
+
+- Built on Material-UI 
+- Type-safe dialog management
+- Lazy loading support
+- Payload and result handling for dialogs
 
 ## Usage Examples
 
@@ -265,6 +271,8 @@ This package requires:
 - React ^19.0.0
 - React DOM ^19.0.0
 - @mui/material ^5.0.0
+- @mui/icons-material ^5.0.0
+- @tanstack/react-form ^1.0.0
 
 ## Development Dependencies
 

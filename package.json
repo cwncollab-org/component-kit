@@ -1,9 +1,10 @@
 {
   "name": "@cwncollab-org/component-kit",
   "private": false,
-  "version": "0.0.2",
+  "version": "0.0.3",
   "type": "module",
   "main": "./dist/index.js",
+  "module": "./dist/index.js",
   "types": "./dist/index.d.ts",
   "homepage": "https://github.com/cwncollab-org/component-kit",
   "repository": {
@@ -11,7 +12,7 @@
     "url": "https://github.com/cwncollab-org/component-kit.git"
   },
   "files": [
-    "lib"
+    "dist"
   ],
   "scripts": {
     "dev": "vite",
