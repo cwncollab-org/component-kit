@@ -23,6 +23,11 @@ export const Route = createRootRoute({
               Dialogs Example
             </Link>
           </MenuItem>
+          <MenuItem>
+            <Link component={RouterLink} to='/tabs-example'>
+              Tabs Example
+            </Link>
+          </MenuItem>
         </MenuList>
       </Box>
       <Box component='main'>

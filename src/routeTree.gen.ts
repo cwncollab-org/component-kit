@@ -11,11 +11,21 @@
 // Import Routes
 
 import { Route as rootRoute } from './routes/__root'
+import { Route as TabsExampleImport } from './routes/tabs-example'
 import { Route as FormExampleImport } from './routes/form-example'
 import { Route as DialogsExampleImport } from './routes/dialogs-example'
 import { Route as IndexImport } from './routes/index'
+import { Route as TabsExampleIndexImport } from './routes/tabs-example/index'
+import { Route as TabsExampleTab2Import } from './routes/tabs-example/tab2'
+import { Route as TabsExampleTab1Import } from './routes/tabs-example/tab1'
 
 // Create/Update Routes
+
+const TabsExampleRoute = TabsExampleImport.update({
+  id: '/tabs-example',
+  path: '/tabs-example',
+  getParentRoute: () => rootRoute,
+} as any)
 
 const FormExampleRoute = FormExampleImport.update({
   id: '/form-example',
@@ -33,6 +43,24 @@ const IndexRoute = IndexImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRoute,
+} as any)
+
+const TabsExampleIndexRoute = TabsExampleIndexImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => TabsExampleRoute,
+} as any)
+
+const TabsExampleTab2Route = TabsExampleTab2Import.update({
+  id: '/tab2',
+  path: '/tab2',
+  getParentRoute: () => TabsExampleRoute,
+} as any)
+
+const TabsExampleTab1Route = TabsExampleTab1Import.update({
+  id: '/tab1',
+  path: '/tab1',
+  getParentRoute: () => TabsExampleRoute,
 } as any)
 
 // Populate the FileRoutesByPath interface
@@ -60,21 +88,72 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FormExampleImport
       parentRoute: typeof rootRoute
     }
+    '/tabs-example': {
+      id: '/tabs-example'
+      path: '/tabs-example'
+      fullPath: '/tabs-example'
+      preLoaderRoute: typeof TabsExampleImport
+      parentRoute: typeof rootRoute
+    }
+    '/tabs-example/tab1': {
+      id: '/tabs-example/tab1'
+      path: '/tab1'
+      fullPath: '/tabs-example/tab1'
+      preLoaderRoute: typeof TabsExampleTab1Import
+      parentRoute: typeof TabsExampleImport
+    }
+    '/tabs-example/tab2': {
+      id: '/tabs-example/tab2'
+      path: '/tab2'
+      fullPath: '/tabs-example/tab2'
+      preLoaderRoute: typeof TabsExampleTab2Import
+      parentRoute: typeof TabsExampleImport
+    }
+    '/tabs-example/': {
+      id: '/tabs-example/'
+      path: '/'
+      fullPath: '/tabs-example/'
+      preLoaderRoute: typeof TabsExampleIndexImport
+      parentRoute: typeof TabsExampleImport
+    }
   }
 }
 
 // Create and export the route tree
 
+interface TabsExampleRouteChildren {
+  TabsExampleTab1Route: typeof TabsExampleTab1Route
+  TabsExampleTab2Route: typeof TabsExampleTab2Route
+  TabsExampleIndexRoute: typeof TabsExampleIndexRoute
+}
+
+const TabsExampleRouteChildren: TabsExampleRouteChildren = {
+  TabsExampleTab1Route: TabsExampleTab1Route,
+  TabsExampleTab2Route: TabsExampleTab2Route,
+  TabsExampleIndexRoute: TabsExampleIndexRoute,
+}
+
+const TabsExampleRouteWithChildren = TabsExampleRoute._addFileChildren(
+  TabsExampleRouteChildren,
+)
+
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dialogs-example': typeof DialogsExampleRoute
   '/form-example': typeof FormExampleRoute
+  '/tabs-example': typeof TabsExampleRouteWithChildren
+  '/tabs-example/tab1': typeof TabsExampleTab1Route
+  '/tabs-example/tab2': typeof TabsExampleTab2Route
+  '/tabs-example/': typeof TabsExampleIndexRoute
 }
 
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dialogs-example': typeof DialogsExampleRoute
   '/form-example': typeof FormExampleRoute
+  '/tabs-example/tab1': typeof TabsExampleTab1Route
+  '/tabs-example/tab2': typeof TabsExampleTab2Route
+  '/tabs-example': typeof TabsExampleIndexRoute
 }
 
 export interface FileRoutesById {
@@ -82,14 +161,39 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/dialogs-example': typeof DialogsExampleRoute
   '/form-example': typeof FormExampleRoute
+  '/tabs-example': typeof TabsExampleRouteWithChildren
+  '/tabs-example/tab1': typeof TabsExampleTab1Route
+  '/tabs-example/tab2': typeof TabsExampleTab2Route
+  '/tabs-example/': typeof TabsExampleIndexRoute
 }
 
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/dialogs-example' | '/form-example'
+  fullPaths:
+    | '/'
+    | '/dialogs-example'
+    | '/form-example'
+    | '/tabs-example'
+    | '/tabs-example/tab1'
+    | '/tabs-example/tab2'
+    | '/tabs-example/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/dialogs-example' | '/form-example'
-  id: '__root__' | '/' | '/dialogs-example' | '/form-example'
+  to:
+    | '/'
+    | '/dialogs-example'
+    | '/form-example'
+    | '/tabs-example/tab1'
+    | '/tabs-example/tab2'
+    | '/tabs-example'
+  id:
+    | '__root__'
+    | '/'
+    | '/dialogs-example'
+    | '/form-example'
+    | '/tabs-example'
+    | '/tabs-example/tab1'
+    | '/tabs-example/tab2'
+    | '/tabs-example/'
   fileRoutesById: FileRoutesById
 }
 
@@ -97,12 +201,14 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DialogsExampleRoute: typeof DialogsExampleRoute
   FormExampleRoute: typeof FormExampleRoute
+  TabsExampleRoute: typeof TabsExampleRouteWithChildren
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DialogsExampleRoute: DialogsExampleRoute,
   FormExampleRoute: FormExampleRoute,
+  TabsExampleRoute: TabsExampleRouteWithChildren,
 }
 
 export const routeTree = rootRoute
@@ -117,7 +223,8 @@ export const routeTree = rootRoute
       "children": [
         "/",
         "/dialogs-example",
-        "/form-example"
+        "/form-example",
+        "/tabs-example"
       ]
     },
     "/": {
@@ -128,6 +235,26 @@ export const routeTree = rootRoute
     },
     "/form-example": {
       "filePath": "form-example.tsx"
+    },
+    "/tabs-example": {
+      "filePath": "tabs-example.tsx",
+      "children": [
+        "/tabs-example/tab1",
+        "/tabs-example/tab2",
+        "/tabs-example/"
+      ]
+    },
+    "/tabs-example/tab1": {
+      "filePath": "tabs-example/tab1.tsx",
+      "parent": "/tabs-example"
+    },
+    "/tabs-example/tab2": {
+      "filePath": "tabs-example/tab2.tsx",
+      "parent": "/tabs-example"
+    },
+    "/tabs-example/": {
+      "filePath": "tabs-example/index.tsx",
+      "parent": "/tabs-example"
     }
   }
 }
