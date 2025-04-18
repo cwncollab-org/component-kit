@@ -5,4 +5,4 @@ export {
   type DialogResult,
 } from './dialogs'
 export { useAppForm, withForm } from './form'
-export { LinkTab, TabLabel } from './tabs'
+export { RouterTab, TabLabel, useRouterTabsValue } from './tabs'
