@@ -1,5 +1,6 @@
 export {
   DialogsProvider,
+  DialogCloseButton,
   useDialogs,
   type DialogProps,
   type DialogResult,
