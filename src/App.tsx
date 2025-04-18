@@ -8,6 +8,9 @@ import {
 import { DialogsProvider } from './lib'
 import { DialogsExample } from './examples/DialogsExample'
 import { FormExample } from './examples/FormExample'
+import { router } from './router'
+import { RouterProvider } from '@tanstack/react-router'
+
 const theme = createTheme({})
 
 export default function App() {
@@ -15,19 +18,8 @@ export default function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <DialogsProvider>
-        <AppPage />
+        <RouterProvider router={router} />
       </DialogsProvider>
     </ThemeProvider>
-  )
-}
-
-function AppPage() {
-  return (
-    <Container sx={{ p: 2 }}>
-      <Stack spacing={4}>
-        <DialogsExample />
-        <FormExample />
-      </Stack>
-    </Container>
   )
 }
