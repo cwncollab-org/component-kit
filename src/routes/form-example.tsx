@@ -2,6 +2,11 @@ import { createFileRoute } from '@tanstack/react-router'
 import { Box, Button, Paper, Stack, Typography } from '@mui/material'
 import { useAppForm } from '../lib'
 import { useState } from 'react'
+import { z } from 'zod'
+
+const formSchema = z.object({
+  username: z.string().min(1),
+})
 
 export const Route = createFileRoute('/form-example')({
   component: FormExample,
@@ -15,8 +20,8 @@ export function FormExample() {
     defaultValues: {
       username: '',
     },
-    onSubmit: ({ value }) => {
-      setValue(value)
+    validators: {
+      onSubmit: formSchema,
     },
   })
   return (
@@ -36,10 +41,6 @@ export function FormExample() {
         <Stack spacing={2}>
           <form.AppField
             name='username'
-            validators={{
-              onChange: ({ value }) =>
-                value.length < 1 ? 'Requires at least 1 character.' : undefined,
-            }}
             children={field => <field.TextField label='Username' fullWidth />}
           />
           <Button type='submit' variant='contained'>

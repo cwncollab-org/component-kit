@@ -265,29 +265,55 @@ export default function ExampleDialog2({
 }
 ```
 
-### Form Example
+### Form Example with Zod Validation
 
 ```tsx
 import { Box, Button, Paper, Stack, Typography } from '@mui/material'
 import { useAppForm } from '@cwncollab-org/component-kit'
 import { useState } from 'react'
+import { z } from 'zod'
+
+// Define your form schema with Zod
+const formSchema = z.object({
+  username: z.string()
+    .min(1, 'Username is required')
+    .max(20, 'Username must be less than 20 characters')
+    .regex(/^[a-zA-Z0-9_]+$/, 'Username can only contain letters, numbers, and underscores'),
+  email: z.string()
+    .email('Invalid email address')
+    .min(1, 'Email is required'),
+  age: z.number()
+    .min(18, 'You must be at least 18 years old')
+    .max(120, 'Please enter a valid age'),
+})
+
+// Infer the form type from the schema
+type FormValues = z.infer<typeof formSchema>
 
 export function FormExample() {
-  const [value, setValue] = useState({
+  const [value, setValue] = useState<FormValues>({
     username: '',
+    email: '',
+    age: 18,
   })
+
   const form = useAppForm({
     defaultValues: {
       username: '',
+      email: '',
+      age: 18,
     },
     onSubmit: ({ value }) => {
       setValue(value)
     },
+    // Add Zod validation
+    validators: { onChange: formSchema },
   })
+
   return (
     <Paper sx={{ p: 2 }}>
       <Box>
-        <Typography>Form Example</Typography>
+        <Typography>Form Example with Zod Validation</Typography>
       </Box>
       <Box
         component='form'
@@ -301,11 +327,37 @@ export function FormExample() {
         <Stack spacing={2}>
           <form.AppField
             name='username'
-            validators={{
-              onChange: ({ value }) =>
-                value.length < 1 ? 'Requires at least 1 character.' : undefined,
-            }}
-            children={field => <field.TextField label='Username' fullWidth />}
+            children={field => (
+              <field.TextField 
+                label='Username' 
+                fullWidth 
+                error={!!field.error}
+                helperText={field.error}
+              />
+            )}
+          />
+          <form.AppField
+            name='email'
+            children={field => (
+              <field.TextField 
+                label='Email' 
+                fullWidth 
+                error={!!field.error}
+                helperText={field.error}
+              />
+            )}
+          />
+          <form.AppField
+            name='age'
+            children={field => (
+              <field.TextField 
+                label='Age' 
+                type='number'
+                fullWidth 
+                error={!!field.error}
+                helperText={field.error}
+              />
+            )}
           />
           <Button type='submit' variant='contained'>
             Submit
@@ -322,8 +374,10 @@ export function FormExample() {
 ```
 
 This example demonstrates:
-- Form creation using `useAppForm` hook
-- Field validation with custom validators
+- Form schema definition using Zod
+- Type inference from Zod schema
+- Field validation with Zod
+- Error handling and display
 - Form submission and reset functionality
 - Integration with Material-UI components
 - Real-time form value display
