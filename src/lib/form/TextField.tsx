@@ -8,7 +8,7 @@ import { useMemo } from 'react'
 type Props = Omit<MuiTextFieldProps, 'name'> & {}
 
 export function TextField(props: Props) {
-  const { label, ...rest } = props
+  const { label, slotProps, ...rest } = props
   const field = useFieldContext<string>()
 
   const errorText = useMemo(() => {
@@ -23,7 +23,10 @@ export function TextField(props: Props) {
       value={field.state.value}
       onBlur={field.handleBlur}
       onChange={e => field.handleChange(e.target.value)}
-      slotProps={{ inputLabel: { shrink: true } }}
+      slotProps={{
+        inputLabel: { shrink: true },
+        ...slotProps,
+      }}
       error={field.state.meta.errors.length > 0}
       helperText={errorText}
       {...rest}
