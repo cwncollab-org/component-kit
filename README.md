@@ -287,6 +287,8 @@ const formSchema = z.object({
     .max(120, 'Please enter a valid age'),
   subscribe: z.boolean()
     .refine(val => val === true, 'You must subscribe to continue'),
+  role: z.string()
+    .min(1, 'Please select a role'),
 })
 
 // Infer the form type from the schema
@@ -298,6 +300,7 @@ export function FormExample() {
     email: '',
     age: 18,
     subscribe: false,
+    role: '',
   })
 
   const form = useAppForm({
@@ -306,9 +309,10 @@ export function FormExample() {
       email: '',
       age: 18,
       subscribe: false,
+      role: '',
     },
     onSubmit: ({ value }) => {
-      setValue(value)
+      setValue(value as FormValues)
     },
     // Add Zod validation
     validators: { onChange: formSchema },
@@ -358,6 +362,22 @@ export function FormExample() {
             )}
           />
           <form.AppField
+            name='role'
+            children={field => (
+              <field.Select
+                label='Role'
+                fullWidth
+       
+              >
+                <MenuItem value=''>
+                  <em>None</em>
+                </MenuItem>
+                <MenuItem value='admin'>Admin</MenuItem>
+                <MenuItem value='user'>User</MenuItem>
+              </field.Select>
+            )}
+          />
+          <form.AppField
             name='subscribe'
             children={field => (
               <field.Checkbox 
@@ -387,6 +407,7 @@ This example demonstrates:
 - Form submission and reset functionality
 - Integration with Material-UI components
 - Real-time form value display
+- Select field integration with options
 
 ## Dependencies
 
