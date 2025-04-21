@@ -285,6 +285,8 @@ const formSchema = z.object({
   age: z.number()
     .min(18, 'You must be at least 18 years old')
     .max(120, 'Please enter a valid age'),
+  subscribe: z.boolean()
+    .refine(val => val === true, 'You must subscribe to continue'),
 })
 
 // Infer the form type from the schema
@@ -295,6 +297,7 @@ export function FormExample() {
     username: '',
     email: '',
     age: 18,
+    subscribe: false,
   })
 
   const form = useAppForm({
@@ -302,6 +305,7 @@ export function FormExample() {
       username: '',
       email: '',
       age: 18,
+      subscribe: false,
     },
     onSubmit: ({ value }) => {
       setValue(value)
@@ -331,8 +335,6 @@ export function FormExample() {
               <field.TextField 
                 label='Username' 
                 fullWidth 
-                error={!!field.error}
-                helperText={field.error}
               />
             )}
           />
@@ -341,9 +343,7 @@ export function FormExample() {
             children={field => (
               <field.TextField 
                 label='Email' 
-                fullWidth 
-                error={!!field.error}
-                helperText={field.error}
+                fullWidth
               />
             )}
           />
@@ -354,8 +354,14 @@ export function FormExample() {
                 label='Age' 
                 type='number'
                 fullWidth 
-                error={!!field.error}
-                helperText={field.error}
+              />
+            )}
+          />
+          <form.AppField
+            name='subscribe'
+            children={field => (
+              <field.Checkbox 
+                label='Subscribe to newsletter'
               />
             )}
           />
