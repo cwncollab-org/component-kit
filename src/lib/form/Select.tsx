@@ -7,21 +7,32 @@ import {
   SelectProps as MuiSelectProps,
   FormHelperText as MuiFormHelperText,
   FormHelperTextProps as MuiFormHelperTextProps,
+  MenuItem,
 } from '@mui/material'
 import { useFieldContext } from './formHooks'
 import { useId, useMemo } from 'react'
 
+type Option = {
+  value: string
+  label: string
+}
+
 type Props = MuiFormControlProps & {
   label?: string
+  options?: Option[] | string[]
   slotProps?: {
-    inputLabel?: MuiInputLabelProps
-    select?: MuiSelectProps
+    inputLabel?: Omit<MuiInputLabelProps, 'id'>
+    select?: Omit<
+      MuiSelectProps,
+      'id' | 'labelId' | 'name' | 'value' | 'onChange' | 'defaultValue'
+    >
     helperText?: MuiFormHelperTextProps
   }
 }
+
 export function Select(props: Props) {
   const field = useFieldContext<string>()
-  const { children, slotProps, ...rest } = props
+  const { children, slotProps, options, ...rest } = props
 
   const id = useId()
   const labelId = `${id}-label`
@@ -31,6 +42,15 @@ export function Select(props: Props) {
     if (field.state.meta.errors.length === 0) return null
     return field.state.meta.errors.map(error => error.message).join(', ')
   }, [field.state.meta.errors])
+
+  const renderedOptions = useMemo<Option[]>(() => {
+    if (options) {
+      return options.map(option =>
+        typeof option === 'string' ? { value: option, label: option } : option
+      )
+    }
+    return []
+  }, [options])
 
   return (
     <MuiFormControl error={Boolean(errorText)} {...rest}>
@@ -47,6 +67,11 @@ export function Select(props: Props) {
         onChange={ev => field.handleChange(ev.target.value as string)}
       >
         {children}
+        {renderedOptions.map(option => (
+          <MenuItem key={option.value} value={option.value}>
+            {option.label}
+          </MenuItem>
+        ))}
       </MuiSelect>
       {Boolean(errorText) && (
         <MuiFormHelperText {...slotProps?.helperText}>

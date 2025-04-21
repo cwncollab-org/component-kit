@@ -16,6 +16,12 @@ export const Route = createFileRoute('/form-example')({
   component: FormExample,
 })
 
+const roles = [
+  { value: 'admin', label: 'Administrator' },
+  { value: 'user', label: 'User' },
+  { value: 'guest', label: 'Guest' },
+]
+
 export function FormExample() {
   const [value, setValue] = useState<FormValues | undefined>(undefined)
   const form = useAppForm({
@@ -58,12 +64,10 @@ export function FormExample() {
           <form.AppField
             name='role'
             children={field => (
-              <field.Select label='Role'>
+              <field.Select label='Role' options={roles}>
                 <MenuItem value=''>
                   <em>None</em>
                 </MenuItem>
-                <MenuItem value='admin'>Admin</MenuItem>
-                <MenuItem value='user'>User</MenuItem>
               </field.Select>
             )}
           />
