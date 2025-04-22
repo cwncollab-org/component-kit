@@ -4,9 +4,11 @@ import { useAppForm } from '../lib'
 import { useState } from 'react'
 import { z } from 'zod'
 
+import dayjs from 'dayjs'
 const formSchema = z.object({
   username: z.string().min(1),
   role: z.enum(['admin', 'user']),
+  date: z.date().max(dayjs().add(1, 'day').toDate()),
   agree: z.boolean(),
 })
 
@@ -29,6 +31,7 @@ export function FormExample() {
       username: '',
       role: '',
       agree: false,
+      date: new Date(),
     },
     validators: {
       onSubmit: formSchema,
@@ -70,6 +73,11 @@ export function FormExample() {
                 </MenuItem>
               </field.Select>
             )}
+          />
+
+          <form.AppField
+            name='date'
+            children={field => <field.DatePicker label='Date' />}
           />
 
           <Button type='submit' variant='contained'>
