@@ -9,6 +9,7 @@ const formSchema = z.object({
   username: z.string().min(1),
   role: z.enum(['admin', 'user']),
   date: z.date().max(dayjs().add(1, 'day').toDate()),
+  time: z.date(),
   agree: z.boolean(),
 })
 
@@ -32,6 +33,7 @@ export function FormExample() {
       role: undefined,
       agree: false,
       date: undefined,
+      time: undefined,
     } as Partial<FormValues>,
     validators: {
       onSubmit: formSchema,
@@ -98,6 +100,13 @@ export function FormExample() {
                 labelShrink
                 size='small'
               />
+            )}
+          />
+
+          <form.AppField
+            name='time'
+            children={field => (
+              <field.TimePicker label='Time' labelShrink size='small' />
             )}
           />
 
