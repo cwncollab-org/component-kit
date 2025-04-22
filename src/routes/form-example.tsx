@@ -63,6 +63,7 @@ export function FormExample() {
                 fullWidth
                 required
                 labelShrink
+                size='small'
               />
             )}
           />
@@ -74,7 +75,13 @@ export function FormExample() {
           <form.AppField
             name='role'
             children={field => (
-              <field.Select label='Role' required options={roles} labelShrink>
+              <field.Select
+                label='Role'
+                required
+                options={roles}
+                labelShrink
+                size='small'
+              >
                 <MenuItem value=''>
                   <em>None</em>
                 </MenuItem>
@@ -85,7 +92,12 @@ export function FormExample() {
           <form.AppField
             name='date'
             children={field => (
-              <field.DatePicker label='Date' required labelShrink />
+              <field.DatePicker
+                label='Date'
+                required
+                labelShrink
+                size='small'
+              />
             )}
           />
 

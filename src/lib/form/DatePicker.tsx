@@ -14,6 +14,7 @@ type Props = Omit<
 > & {
   required?: boolean
   labelShrink?: boolean
+  size?: 'small' | 'medium'
 }
 
 export function DatePicker(props: Props) {
@@ -24,7 +25,7 @@ export function DatePicker(props: Props) {
     return field.state.meta.errors.map(error => error.message).join(', ')
   }, [field.state.meta.errors])
 
-  const { required, labelShrink, ...rest } = props
+  const { required, labelShrink, size, ...rest } = props
 
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
@@ -43,6 +44,7 @@ export function DatePicker(props: Props) {
             error: Boolean(errorText),
             helperText: errorText,
             InputLabelProps: { shrink: labelShrink },
+            size: size,
             InputProps: {
               notched: labelShrink,
             },
