@@ -18,7 +18,7 @@ type Props = Omit<
 }
 
 export function DatePicker(props: Props) {
-  const field = useFieldContext<Date>()
+  const field = useFieldContext<Date | string>()
 
   const errorText = useMemo(() => {
     if (field.state.meta.errors.length === 0) return null
