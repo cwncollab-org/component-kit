@@ -56,7 +56,7 @@ export function FormExample() {
           form.handleSubmit()
         }}
       >
-        <Stack spacing={2}>
+        <Stack spacing={2} alignItems='flex-start'>
           <form.AppField
             name='username'
             children={field => (
@@ -83,6 +83,7 @@ export function FormExample() {
                 options={roles}
                 labelShrink
                 size='small'
+                fullWidth
               >
                 <MenuItem value=''>
                   <em>None</em>
@@ -98,6 +99,7 @@ export function FormExample() {
                 label='Date'
                 required
                 labelShrink
+                fullWidth
                 size='small'
               />
             )}
@@ -106,7 +108,12 @@ export function FormExample() {
           <form.AppField
             name='time'
             children={field => (
-              <field.TimePicker label='Time' labelShrink size='small' />
+              <field.TimePicker
+                label='Time'
+                labelShrink
+                size='small'
+                fullWidth
+              />
             )}
           />
 
