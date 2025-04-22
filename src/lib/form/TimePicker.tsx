@@ -3,7 +3,8 @@ import { TimePickerProps as MuiTimePickerProps } from '@mui/x-date-pickers/TimeP
 import { useFieldContext } from './formHooks'
 import dayjs from 'dayjs'
 import { useMemo } from 'react'
-
+import { LocalizationProvider } from '@mui/x-date-pickers'
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs'
 type Props = Omit<
   MuiTimePickerProps,
   'name' | 'value' | 'onChange' | 'defaultValue'
@@ -22,27 +23,29 @@ export function TimePicker(props: Props) {
 
   const { required, labelShrink, size, ...rest } = props
   return (
-    <MuiTimePicker
-      {...rest}
-      name={field.name}
-      value={field.state.value ? dayjs(field.state.value) : null}
-      onChange={value => {
-        if (value) {
-          field.handleChange(value.toDate())
-        }
-      }}
-      slotProps={{
-        textField: {
-          required: required,
-          error: Boolean(errorText),
-          helperText: errorText,
-          InputLabelProps: { shrink: labelShrink },
-          size: size,
-          InputProps: {
-            notched: labelShrink,
+    <LocalizationProvider dateAdapter={AdapterDayjs}>
+      <MuiTimePicker
+        {...rest}
+        name={field.name}
+        value={field.state.value ? dayjs(field.state.value) : null}
+        onChange={value => {
+          if (value) {
+            field.handleChange(value.toDate())
+          }
+        }}
+        slotProps={{
+          textField: {
+            required: required,
+            error: Boolean(errorText),
+            helperText: errorText,
+            InputLabelProps: { shrink: labelShrink },
+            size: size,
+            InputProps: {
+              notched: labelShrink,
+            },
           },
-        },
-      }}
-    />
+        }}
+      />
+    </LocalizationProvider>
   )
 }
