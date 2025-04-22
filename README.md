@@ -289,6 +289,9 @@ const formSchema = z.object({
     .refine(val => val === true, 'You must subscribe to continue'),
   role: z.string()
     .min(1, 'Please select a role'),
+  birthDate: z.date()
+    .min(new Date('1900-01-01'), 'Please enter a valid birth date')
+    .max(new Date(), 'Birth date cannot be in the future'),
 })
 
 // Infer the form type from the schema
@@ -301,6 +304,7 @@ export function FormExample() {
     age: 18,
     subscribe: false,
     role: '',
+    birthDate: new Date(),
   })
 
   const form = useAppForm({
@@ -310,6 +314,7 @@ export function FormExample() {
       age: 18,
       subscribe: false,
       role: '',
+      birthDate: new Date(),
     },
     onSubmit: ({ value }) => {
       setValue(value as FormValues)
@@ -362,12 +367,19 @@ export function FormExample() {
             )}
           />
           <form.AppField
+            name='birthDate'
+            children={field => (
+              <field.DatePicker
+                label='Birth Date'
+              />
+            )}
+          />
+          <form.AppField
             name='role'
             children={field => (
               <field.Select
                 label='Role'
                 fullWidth
-       
               >
                 <MenuItem value=''>
                   <em>None</em>
@@ -398,33 +410,3 @@ export function FormExample() {
   )
 }
 ```
-
-This example demonstrates:
-- Form schema definition using Zod
-- Type inference from Zod schema
-- Field validation with Zod
-- Error handling and display
-- Form submission and reset functionality
-- Integration with Material-UI components
-- Real-time form value display
-- Select field integration with options
-
-## Dependencies
-
-This package requires:
-- React ^19.0.0
-- React DOM ^19.0.0
-- @mui/material ^5.0.0
-- @mui/icons-material ^5.0.0
-- @tanstack/react-form ^1.0.0
-
-## Development Dependencies
-
-- TypeScript
-- Vite
-- ESLint
-- Prettier
-
-## License
-
-[Add your license information here]
