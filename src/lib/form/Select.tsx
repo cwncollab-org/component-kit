@@ -19,6 +19,7 @@ type Option = {
 
 type Props = MuiFormControlProps & {
   label?: string
+  labelShrink?: boolean
   options?: Option[] | string[]
   slotProps?: {
     inputLabel?: Omit<MuiInputLabelProps, 'id'>
@@ -32,7 +33,7 @@ type Props = MuiFormControlProps & {
 
 export function Select(props: Props) {
   const field = useFieldContext<string>()
-  const { children, slotProps, options, ...rest } = props
+  const { children, slotProps, options, labelShrink, ...rest } = props
 
   const id = useId()
   const labelId = `${id}-label`
@@ -54,12 +55,17 @@ export function Select(props: Props) {
 
   return (
     <MuiFormControl error={Boolean(errorText)} {...rest}>
-      <MuiInputLabel id={labelId} {...slotProps?.inputLabel}>
+      <MuiInputLabel
+        id={labelId}
+        {...slotProps?.inputLabel}
+        shrink={labelShrink}
+      >
         {props.label}
       </MuiInputLabel>
       <MuiSelect
         id={selectId}
         labelId={labelId}
+        notched={labelShrink}
         {...slotProps?.select}
         label={props.label}
         name={field.name}

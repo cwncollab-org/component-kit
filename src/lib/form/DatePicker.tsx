@@ -11,7 +11,10 @@ import { useMemo } from 'react'
 type Props = Omit<
   MuiDatePickerProps,
   'name' | 'value' | 'onChange' | 'defaultValue'
->
+> & {
+  required?: boolean
+  labelShrink?: boolean
+}
 
 export function DatePicker(props: Props) {
   const field = useFieldContext<Date>()
@@ -21,12 +24,14 @@ export function DatePicker(props: Props) {
     return field.state.meta.errors.map(error => error.message).join(', ')
   }, [field.state.meta.errors])
 
+  const { required, labelShrink, ...rest } = props
+
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <MuiDatePicker
-        {...props}
+        {...rest}
         name={field.name}
-        value={dayjs(field.state.value)}
+        value={field.state.value ? dayjs(field.state.value) : null}
         onChange={value => {
           if (value) {
             field.handleChange(value.toDate())
@@ -34,8 +39,13 @@ export function DatePicker(props: Props) {
         }}
         slotProps={{
           textField: {
+            required: required,
             error: Boolean(errorText),
             helperText: errorText,
+            InputLabelProps: { shrink: labelShrink },
+            InputProps: {
+              notched: labelShrink,
+            },
           },
         }}
       />

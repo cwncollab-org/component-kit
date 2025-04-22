@@ -29,10 +29,10 @@ export function FormExample() {
   const form = useAppForm({
     defaultValues: {
       username: '',
-      role: '',
+      role: undefined,
       agree: false,
-      date: new Date(),
-    },
+      date: undefined,
+    } as Partial<FormValues>,
     validators: {
       onSubmit: formSchema,
     },
@@ -57,7 +57,14 @@ export function FormExample() {
         <Stack spacing={2}>
           <form.AppField
             name='username'
-            children={field => <field.TextField label='Username' fullWidth />}
+            children={field => (
+              <field.TextField
+                label='Username'
+                fullWidth
+                required
+                labelShrink
+              />
+            )}
           />
           <form.AppField
             name='agree'
@@ -67,7 +74,7 @@ export function FormExample() {
           <form.AppField
             name='role'
             children={field => (
-              <field.Select label='Role' options={roles}>
+              <field.Select label='Role' required options={roles} labelShrink>
                 <MenuItem value=''>
                   <em>None</em>
                 </MenuItem>
@@ -77,7 +84,9 @@ export function FormExample() {
 
           <form.AppField
             name='date'
-            children={field => <field.DatePicker label='Date' />}
+            children={field => (
+              <field.DatePicker label='Date' required labelShrink />
+            )}
           />
 
           <Button type='submit' variant='contained'>
