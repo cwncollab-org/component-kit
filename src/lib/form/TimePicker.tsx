@@ -12,6 +12,7 @@ type Props = Omit<
   required?: boolean
   labelShrink?: boolean
   size?: 'small' | 'medium'
+  fullWidth?: boolean
 }
 export function TimePicker(props: Props) {
   const field = useFieldContext<Date | string>()
@@ -21,7 +22,7 @@ export function TimePicker(props: Props) {
     return field.state.meta.errors.map(error => error.message).join(', ')
   }, [field.state.meta.errors])
 
-  const { required, labelShrink, size, ...rest } = props
+  const { required, labelShrink, size, fullWidth, ...rest } = props
   return (
     <LocalizationProvider dateAdapter={AdapterDayjs}>
       <MuiTimePicker
@@ -40,6 +41,7 @@ export function TimePicker(props: Props) {
             helperText: errorText,
             InputLabelProps: { shrink: labelShrink },
             size: size,
+            fullWidth: fullWidth,
             InputProps: {
               notched: labelShrink,
             },
