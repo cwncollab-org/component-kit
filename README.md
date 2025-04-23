@@ -410,3 +410,94 @@ export function FormExample() {
   )
 }
 ```
+
+### Layout Components
+
+The library provides a flexible and responsive layout system built on top of Material-UI. The main layout component is `AppLayout` which includes a responsive app bar, collapsible sidebar, and main content area.
+
+#### Basic Layout Usage
+
+```tsx
+import { AppLayout, NavList } from '@cwncollab-org/component-kit'
+import { Home, Article, Person } from '@mui/icons-material'
+import { IconButton } from '@mui/material'
+
+// Define navigation items
+const navList: NavList = {
+  items: [
+    {
+      icon: <Home />,
+      label: 'Home',
+      url: '/',
+    },
+    {
+      icon: <Article />,
+      label: 'Form Example',
+      url: '/form-example',
+    },
+    {
+      icon: <Article />,
+      label: 'Dialogs Example',
+      url: '/dialogs-example',
+    },
+  ],
+}
+
+function App() {
+  return (
+    <AppLayout
+      title='Demo App'
+      navList={navList}
+      slotProps={{
+        appBar: {
+          endSlot: (
+            <IconButton color='inherit' aria-label='profile'>
+              <Person />
+            </IconButton>
+          ),
+        },
+      }}
+    >
+      {/* Your app content goes here */}
+      <div>Main Content</div>
+    </AppLayout>
+  )
+}
+```
+
+#### Layout Features
+
+- Responsive design with mobile-friendly drawer
+- Collapsible sidebar with smooth transitions
+- Customizable app bar with optional end slot
+- Type-safe navigation list configuration
+- Support for multiple navigation lists
+- Customizable drawer widths for expanded and collapsed states
+
+#### Layout Props
+
+```tsx
+type AppLayoutProps = {
+  title?: string                    // App bar title
+  navList?: NavList | NavList[]     // Navigation items
+  drawerWidth?: number             // Width of expanded drawer (default: 240)
+  collapsedDrawerWidth?: number    // Width of collapsed drawer (default: 64)
+  slotProps?: {
+    appBar?: Omit<AppBarProps, 'title' | 'status' | 'sidebarOpen' | 'drawerWidth' | 'collapsedDrawerWidth' | 'onDrawerToggle'>
+  }
+  sx?: SxProps                     // Custom styles
+  children: React.ReactNode        // Main content
+}
+```
+
+#### Navigation List Configuration
+
+```tsx
+type NavList = {
+  items: Array<{
+    icon: React.ReactNode          // Navigation item icon
+    label: string                  // Navigation item label
+    url?: string                   // Optional URL for navigation
+  }>
+}
+```
