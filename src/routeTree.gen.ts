@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as TabsExampleImport } from './routes/tabs-example'
+import { Route as LayoutExampleImport } from './routes/layout-example'
 import { Route as FormExampleImport } from './routes/form-example'
 import { Route as DialogsExampleImport } from './routes/dialogs-example'
 import { Route as IndexImport } from './routes/index'
@@ -24,6 +25,12 @@ import { Route as TabsExampleTab1Import } from './routes/tabs-example/tab1'
 const TabsExampleRoute = TabsExampleImport.update({
   id: '/tabs-example',
   path: '/tabs-example',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const LayoutExampleRoute = LayoutExampleImport.update({
+  id: '/layout-example',
+  path: '/layout-example',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -88,6 +95,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof FormExampleImport
       parentRoute: typeof rootRoute
     }
+    '/layout-example': {
+      id: '/layout-example'
+      path: '/layout-example'
+      fullPath: '/layout-example'
+      preLoaderRoute: typeof LayoutExampleImport
+      parentRoute: typeof rootRoute
+    }
     '/tabs-example': {
       id: '/tabs-example'
       path: '/tabs-example'
@@ -141,6 +155,7 @@ export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/dialogs-example': typeof DialogsExampleRoute
   '/form-example': typeof FormExampleRoute
+  '/layout-example': typeof LayoutExampleRoute
   '/tabs-example': typeof TabsExampleRouteWithChildren
   '/tabs-example/tab1': typeof TabsExampleTab1Route
   '/tabs-example/tab2': typeof TabsExampleTab2Route
@@ -151,6 +166,7 @@ export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/dialogs-example': typeof DialogsExampleRoute
   '/form-example': typeof FormExampleRoute
+  '/layout-example': typeof LayoutExampleRoute
   '/tabs-example/tab1': typeof TabsExampleTab1Route
   '/tabs-example/tab2': typeof TabsExampleTab2Route
   '/tabs-example': typeof TabsExampleIndexRoute
@@ -161,6 +177,7 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/dialogs-example': typeof DialogsExampleRoute
   '/form-example': typeof FormExampleRoute
+  '/layout-example': typeof LayoutExampleRoute
   '/tabs-example': typeof TabsExampleRouteWithChildren
   '/tabs-example/tab1': typeof TabsExampleTab1Route
   '/tabs-example/tab2': typeof TabsExampleTab2Route
@@ -173,6 +190,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dialogs-example'
     | '/form-example'
+    | '/layout-example'
     | '/tabs-example'
     | '/tabs-example/tab1'
     | '/tabs-example/tab2'
@@ -182,6 +200,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dialogs-example'
     | '/form-example'
+    | '/layout-example'
     | '/tabs-example/tab1'
     | '/tabs-example/tab2'
     | '/tabs-example'
@@ -190,6 +209,7 @@ export interface FileRouteTypes {
     | '/'
     | '/dialogs-example'
     | '/form-example'
+    | '/layout-example'
     | '/tabs-example'
     | '/tabs-example/tab1'
     | '/tabs-example/tab2'
@@ -201,6 +221,7 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   DialogsExampleRoute: typeof DialogsExampleRoute
   FormExampleRoute: typeof FormExampleRoute
+  LayoutExampleRoute: typeof LayoutExampleRoute
   TabsExampleRoute: typeof TabsExampleRouteWithChildren
 }
 
@@ -208,6 +229,7 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   DialogsExampleRoute: DialogsExampleRoute,
   FormExampleRoute: FormExampleRoute,
+  LayoutExampleRoute: LayoutExampleRoute,
   TabsExampleRoute: TabsExampleRouteWithChildren,
 }
 
@@ -224,6 +246,7 @@ export const routeTree = rootRoute
         "/",
         "/dialogs-example",
         "/form-example",
+        "/layout-example",
         "/tabs-example"
       ]
     },
@@ -235,6 +258,9 @@ export const routeTree = rootRoute
     },
     "/form-example": {
       "filePath": "form-example.tsx"
+    },
+    "/layout-example": {
+      "filePath": "layout-example.tsx"
     },
     "/tabs-example": {
       "filePath": "tabs-example.tsx",
