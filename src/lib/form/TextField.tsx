@@ -18,6 +18,7 @@ export function TextField(props: Props) {
 
   return (
     <MuiTextField
+      {...rest}
       name={field.name}
       label={label}
       value={field.state.value}
@@ -29,7 +30,6 @@ export function TextField(props: Props) {
       }}
       error={field.state.meta.errors.length > 0}
       helperText={errorText}
-      {...rest}
     />
   )
 }

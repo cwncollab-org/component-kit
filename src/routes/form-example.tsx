@@ -7,9 +7,10 @@ import { z } from 'zod'
 import dayjs from 'dayjs'
 const formSchema = z.object({
   username: z.string().min(1),
-  role: z.enum(['admin', 'user']),
+  role: z.enum(['', 'admin', 'user']),
   date: z.date().max(dayjs().add(1, 'day').toDate()),
   time: z.date(),
+  phone: z.string().min(10),
   agree: z.boolean(),
 })
 
@@ -20,6 +21,7 @@ export const Route = createFileRoute('/form-example')({
 })
 
 const roles = [
+  { value: '', label: 'Select Role' },
   { value: 'admin', label: 'Administrator' },
   { value: 'user', label: 'User' },
   { value: 'guest', label: 'Guest' },
@@ -30,10 +32,11 @@ export function FormExample() {
   const form = useAppForm({
     defaultValues: {
       username: '',
-      role: undefined,
+      role: '',
       agree: false,
       date: undefined,
       time: undefined,
+      phone: '',
     } as Partial<FormValues>,
     validators: {
       onSubmit: formSchema,
@@ -84,11 +87,7 @@ export function FormExample() {
                 labelShrink
                 size='small'
                 fullWidth
-              >
-                <MenuItem value=''>
-                  <em>None</em>
-                </MenuItem>
-              </field.Select>
+              ></field.Select>
             )}
           />
 
@@ -117,6 +116,17 @@ export function FormExample() {
             )}
           />
 
+          <form.AppField
+            name='phone'
+            children={field => (
+              <field.MaskTextField
+                mask='(#00) 000-0000'
+                definitions={{
+                  '#': /[1-9]/,
+                }}
+              />
+            )}
+          />
           <Button type='submit' variant='contained'>
             Submit
           </Button>
