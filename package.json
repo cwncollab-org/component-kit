@@ -41,7 +41,9 @@
     "@mui/x-date-pickers": "^8.0.0",
     "@tanstack/react-form": "^1.0.0",
     "@tanstack/react-router": "^1.116.0",
-    "dayjs": "^1.11.13"
+    "@tanstack/react-table": "^8.21.3",
+    "dayjs": "^1.11.13",
+    "material-react-table": "^3.2.1"
   },
   "devDependencies": {
     "@eslint/js": "^9.22.0",
