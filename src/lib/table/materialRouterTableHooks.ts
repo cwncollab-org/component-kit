@@ -68,6 +68,7 @@ export function useMaterialRouterTable<TData extends MRT_RowData>(
 
     navigate({
       search: {
+        // @ts-ignore
         page:
           pagination.pageIndex === initialPaginationState.pageIndex
             ? undefined
