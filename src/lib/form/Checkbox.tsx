@@ -4,7 +4,7 @@ import {
   FormControlLabel as MuiFormControlLabel,
   FormControlLabelProps as MuiFormControlLabelProps,
 } from '@mui/material'
-import { useFieldContext } from './formHooks'
+import { useFieldContext } from './formContext'
 
 type Props = Omit<MuiCheckboxProps, 'name'> &
   Pick<MuiFormControlLabelProps, 'label' | 'required' | 'disabled'>
