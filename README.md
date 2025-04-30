@@ -397,12 +397,18 @@ export function FormExample() {
               />
             )}
           />
-          <Button type='submit' variant='contained'>
-            Submit
-          </Button>
-          <Button type='reset' variant='contained' onClick={() => form.reset()}>
-            Reset
-          </Button>
+          <form.AppForm>
+            <form.SubscribeButton type='submit' variant='contained'>
+              Submit
+            </form.SubscribeButton>
+            <form.SubscribeButton
+              type='reset'
+              variant='outlined'
+              onClick={() => form.reset()}
+            >
+              Reset
+            </form.SubscribeButton>
+          </form.AppForm>
           <Typography variant='body1'>{JSON.stringify(value)}</Typography>
         </Stack>
       </Box>
