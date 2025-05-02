@@ -67,7 +67,6 @@ export function useMaterialRouterTable<TData extends MRT_RowData>(
     const desc = singleSorting?.desc
 
     const nextSearch = {
-      // @ts-ignore
       page:
         pagination.pageIndex === initialPaginationState.pageIndex
           ? undefined
@@ -90,6 +89,7 @@ export function useMaterialRouterTable<TData extends MRT_RowData>(
     ) {
       navigate({
         replace: true,
+        // @ts-ignore
         search: nextSearch,
       })
     }
