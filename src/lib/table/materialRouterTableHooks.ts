@@ -96,9 +96,18 @@ export function useMaterialRouterTable<TData extends MRT_RowData>(
   }, [navigate, pagination, sorting, density])
 
   return useMaterialReactTable({
-    onPaginationChange: setPagination,
-    onSortingChange: setSorting,
-    onDensityChange: setDensity,
+    onPaginationChange: state => {
+      setPagination(state)
+      opts.onPaginationChange?.(state)
+    },
+    onSortingChange: state => {
+      setSorting(state)
+      opts.onSortingChange?.(state)
+    },
+    onDensityChange: state => {
+      setDensity(state)
+      opts.onDensityChange?.(state)
+    },
     ...opts,
     initialState: {
       ...opts.initialState,
