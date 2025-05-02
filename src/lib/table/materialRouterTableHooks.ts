@@ -67,6 +67,7 @@ export function useMaterialRouterTable<TData extends MRT_RowData>(
     const desc = singleSorting?.desc
 
     navigate({
+      replace: true,
       search: {
         // @ts-ignore
         page:
