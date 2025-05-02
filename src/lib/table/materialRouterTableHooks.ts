@@ -66,23 +66,33 @@ export function useMaterialRouterTable<TData extends MRT_RowData>(
     const order = singleSorting ? singleSorting.id : undefined
     const desc = singleSorting?.desc
 
-    navigate({
-      replace: true,
-      search: {
-        // @ts-ignore
-        page:
-          pagination.pageIndex === initialPaginationState.pageIndex
-            ? undefined
-            : pagination.pageIndex + 1,
-        pageSize:
-          pagination.pageSize === initialPaginationState.pageSize
-            ? undefined
-            : pagination.pageSize,
-        order,
-        desc: desc ? true : undefined,
-        density: density === initialDensityState ? undefined : density,
-      },
-    })
+    const nextSearch = {
+      // @ts-ignore
+      page:
+        pagination.pageIndex === initialPaginationState.pageIndex
+          ? undefined
+          : pagination.pageIndex + 1,
+      pageSize:
+        pagination.pageSize === initialPaginationState.pageSize
+          ? undefined
+          : pagination.pageSize,
+      order,
+      desc: desc ? true : undefined,
+      density: density === initialDensityState ? undefined : density,
+    }
+
+    if (
+      search.page !== nextSearch.page ||
+      search.pageSize !== nextSearch.pageSize ||
+      search.order !== nextSearch.order ||
+      search.desc !== nextSearch.desc ||
+      search.density !== nextSearch.density
+    ) {
+      navigate({
+        replace: true,
+        search: nextSearch,
+      })
+    }
   }, [navigate, pagination, sorting, density])
 
   return useMaterialReactTable({
