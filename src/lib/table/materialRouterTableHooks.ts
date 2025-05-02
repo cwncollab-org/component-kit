@@ -97,6 +97,7 @@ export function useMaterialRouterTable<TData extends MRT_RowData>(
       density: initialDensityState,
     },
     state: {
+      ...opts.state,
       pagination,
       sorting,
       density,
