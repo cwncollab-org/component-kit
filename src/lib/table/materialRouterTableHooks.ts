@@ -30,18 +30,26 @@ export function useMaterialRouterTable<TData extends MRT_RowData>(
   path: ValidateFromPath,
   opts: MRT_TableOptions<TData>
 ) {
+  const {
+    initialState,
+    onPaginationChange,
+    onSortingChange,
+    onDensityChange,
+    state,
+    ...rest
+  } = opts
   const search = tableSearchSchema.parse(useSearch({ strict: false }))
   const navigate = useNavigate({ from: path })
 
   const initialPaginationState: PaginationState = {
-    pageIndex: opts.initialState?.pagination?.pageIndex ?? 0,
-    pageSize: opts.initialState?.pagination?.pageSize ?? defaultPageSize,
+    pageIndex: initialState?.pagination?.pageIndex ?? 0,
+    pageSize: initialState?.pagination?.pageSize ?? defaultPageSize,
   }
 
-  const initialSortingState: SortingState = opts.initialState?.sorting ?? []
+  const initialSortingState: SortingState = initialState?.sorting ?? []
 
   const initialDensityState: MRT_DensityState =
-    opts.initialState?.density ?? defaultDensity
+    initialState?.density ?? defaultDensity
 
   const searchPaginationState: PaginationState = {
     pageIndex: search.page ? search.page - 1 : 0,
@@ -98,25 +106,25 @@ export function useMaterialRouterTable<TData extends MRT_RowData>(
   return useMaterialReactTable({
     onPaginationChange: state => {
       setPagination(state)
-      opts.onPaginationChange?.(state)
+      onPaginationChange?.(state)
     },
     onSortingChange: state => {
       setSorting(state)
-      opts.onSortingChange?.(state)
+      onSortingChange?.(state)
     },
     onDensityChange: state => {
       setDensity(state)
-      opts.onDensityChange?.(state)
+      onDensityChange?.(state)
     },
-    ...opts,
+    ...rest,
     initialState: {
-      ...opts.initialState,
+      ...initialState,
       pagination: initialPaginationState,
       sorting: initialSortingState,
       density: initialDensityState,
     },
     state: {
-      ...opts.state,
+      ...state,
       pagination,
       sorting,
       density,
