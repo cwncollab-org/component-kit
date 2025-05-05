@@ -11,6 +11,7 @@ const formSchema = z.object({
   date: z.date().max(dayjs().add(1, 'day').toDate()),
   time: z.date(),
   agree: z.boolean(),
+  email: z.string().email().optional(),
 })
 
 type FormValues = z.infer<typeof formSchema>
@@ -121,6 +122,11 @@ export function FormExample() {
                 fullWidth
               />
             )}
+          />
+
+          <form.AppField
+            name='email'
+            children={field => <field.TextField label='Email' fullWidth />}
           />
 
           <form.AppForm>

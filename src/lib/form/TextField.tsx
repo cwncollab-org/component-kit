@@ -9,7 +9,7 @@ type Props = Omit<MuiTextFieldProps, 'name'> & { labelShrink?: boolean }
 
 export function TextField(props: Props) {
   const { label, slotProps, labelShrink, ...rest } = props
-  const field = useFieldContext<string>()
+  const field = useFieldContext<string | undefined | null>()
 
   const errorText = useMemo(() => {
     if (field.state.meta.errors.length === 0) return null
@@ -20,9 +20,11 @@ export function TextField(props: Props) {
     <MuiTextField
       name={field.name}
       label={label}
-      value={field.state.value}
+      value={field.state.value ?? ''}
       onBlur={field.handleBlur}
-      onChange={e => field.handleChange(e.target.value)}
+      onChange={e =>
+        field.handleChange(e.target.value === '' ? undefined : e.target.value)
+      }
       slotProps={{
         inputLabel: { shrink: labelShrink },
         ...slotProps,
