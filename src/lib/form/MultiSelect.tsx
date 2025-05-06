@@ -92,7 +92,12 @@ export function MultiSelect(props: MultiSelectProps) {
   }, [field.state.value, renderedOptions, sortSelected])
 
   return (
-    <MuiFormControl error={Boolean(errorText)} fullWidth={fullWidth} {...rest}>
+    <MuiFormControl
+      error={Boolean(errorText)}
+      fullWidth={fullWidth}
+      size={size}
+      {...rest}
+    >
       <MuiInputLabel
         id={labelId}
         {...slotProps?.inputLabel}
@@ -104,7 +109,6 @@ export function MultiSelect(props: MultiSelectProps) {
         id={selectId}
         labelId={labelId}
         notched={labelShrink}
-        size={size}
         multiple
         value={getSortedSelectedValues}
         onChange={ev => field.handleChange(ev.target.value as string[])}

@@ -66,7 +66,12 @@ export function Select(props: SelectProps) {
   }, [options])
 
   return (
-    <MuiFormControl error={Boolean(errorText)} fullWidth={fullWidth} {...rest}>
+    <MuiFormControl
+      error={Boolean(errorText)}
+      fullWidth={fullWidth}
+      size={size}
+      {...rest}
+    >
       <MuiInputLabel
         id={labelId}
         {...slotProps?.inputLabel}
@@ -78,7 +83,6 @@ export function Select(props: SelectProps) {
         id={selectId}
         labelId={labelId}
         notched={labelShrink}
-        size={size}
         multiple={multiple}
         {...slotProps?.select}
         label={props.label}
