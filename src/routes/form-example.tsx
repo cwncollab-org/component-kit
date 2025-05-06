@@ -73,88 +73,90 @@ export function FormExample() {
           form.handleSubmit()
         }}
       >
-        <Stack spacing={2} alignItems='flex-start'>
-          <form.AppField
-            name='username'
-            children={field => (
-              <field.TextField
-                label='Username'
-                fullWidth
-                required
-                labelShrink
-                size='small'
-              />
-            )}
-          />
-          <form.AppField
-            name='agree'
-            children={field => <field.Checkbox label='Agree to terms' />}
-          />
+        <form.AppForm>
+          <Stack spacing={2} alignItems='flex-start'>
+            <form.AppField
+              name='username'
+              children={field => (
+                <field.SubscribeTextField
+                  label='Username'
+                  fullWidth
+                  required
+                  labelShrink
+                  size='small'
+                />
+              )}
+            />
+            <form.AppField
+              name='agree'
+              children={field => (
+                <field.SubscribeCheckbox label='Agree to terms' />
+              )}
+            />
 
-          <form.AppField
-            name='role'
-            children={field => (
-              <field.Select
-                label='Role'
-                required
-                options={roles}
-                labelShrink
-                size='small'
-                fullWidth
-              >
-                <MenuItem value=''>
-                  <em>None</em>
-                </MenuItem>
-              </field.Select>
-            )}
-          />
+            <form.AppField
+              name='role'
+              children={field => (
+                <field.SubscribeSelect
+                  label='Role'
+                  required
+                  options={roles}
+                  labelShrink
+                  size='small'
+                  fullWidth
+                >
+                  <MenuItem value=''>
+                    <em>None</em>
+                  </MenuItem>
+                </field.SubscribeSelect>
+              )}
+            />
 
-          <form.AppField
-            name='categories'
-            children={field => (
-              <field.MultiSelect
-                label='Categories'
-                required
-                options={categories}
-                labelShrink
-                size='small'
-                sortSelected='label'
-                fullWidth
-              />
-            )}
-          />
+            <form.AppField
+              name='categories'
+              children={field => (
+                <field.SubscribeMultiSelect
+                  label='Categories'
+                  required
+                  options={categories}
+                  labelShrink
+                  size='small'
+                  sortSelected='label'
+                  fullWidth
+                />
+              )}
+            />
 
-          <form.AppField
-            name='date'
-            children={field => (
-              <field.DatePicker
-                label='Date'
-                required
-                labelShrink
-                fullWidth
-                size='small'
-              />
-            )}
-          />
+            <form.AppField
+              name='date'
+              children={field => (
+                <field.SubscribeDatePicker
+                  label='Date'
+                  required
+                  labelShrink
+                  fullWidth
+                  size='small'
+                />
+              )}
+            />
 
-          <form.AppField
-            name='time'
-            children={field => (
-              <field.TimePicker
-                label='Time'
-                labelShrink
-                size='small'
-                fullWidth
-              />
-            )}
-          />
+            <form.AppField
+              name='time'
+              children={field => (
+                <field.SubscribeTimePicker
+                  label='Time'
+                  labelShrink
+                  size='small'
+                  fullWidth
+                />
+              )}
+            />
 
-          <form.AppField
-            name='email'
-            children={field => <field.TextField label='Email' fullWidth />}
-          />
+            <form.AppField
+              name='email'
+              children={field => <field.TextField label='Email' fullWidth />}
+            />
 
-          <form.AppForm>
             <form.SubscribeButton type='submit' variant='contained'>
               Submit
             </form.SubscribeButton>
@@ -165,9 +167,10 @@ export function FormExample() {
             >
               Reset
             </form.SubscribeButton>
-          </form.AppForm>
-          <Typography variant='body1'>{JSON.stringify(value)}</Typography>
-        </Stack>
+
+            <Typography variant='body1'>{JSON.stringify(value)}</Typography>
+          </Stack>
+        </form.AppForm>
       </Box>
     </Paper>
   )

@@ -5,9 +5,11 @@ import {
 import { useFieldContext } from './formContext'
 import { useMemo } from 'react'
 
-type Props = Omit<MuiTextFieldProps, 'name'> & { labelShrink?: boolean }
+export type TextFieldProps = Omit<MuiTextFieldProps, 'name'> & {
+  labelShrink?: boolean
+}
 
-export function TextField(props: Props) {
+export function TextField(props: TextFieldProps) {
   const { label, slotProps, labelShrink, ...rest } = props
   const field = useFieldContext<string | undefined | null>()
 

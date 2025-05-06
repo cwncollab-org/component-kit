@@ -87,7 +87,7 @@ export function Select(props: SelectProps) {
         {...slotProps?.select}
         label={props.label}
         name={field.name}
-        value={field.state.value}
+        value={field.state.value ?? ''}
         onChange={ev => field.handleChange(ev.target.value as string)}
       >
         {children}
