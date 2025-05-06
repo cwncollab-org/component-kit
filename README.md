@@ -1,6 +1,9 @@
 # Component Kit
 
+> **Note**: This documentation was generated with the assistance of AI. While we strive for accuracy, please verify any code examples or implementation details in your specific use case.
+
 A React component library built with TypeScript and Vite. This package provides a set of reusable components built on top of [Material-UI (MUI)](https://mui.com/) and [Tanstack Form](https://tanstack.com/form/latest) for form handling.
+
 
 ## Features
 
@@ -8,6 +11,7 @@ A React component library built with TypeScript and Vite. This package provides 
 - Type-safe dialog management
 - Lazy loading support
 - Payload and result handling for dialogs
+- Form components with TanStack Form integration
 
 ## Usage Examples
 
@@ -507,3 +511,70 @@ type NavList = {
   }>
 }
 ```
+
+### MultiSelect Component
+
+The MultiSelect component provides a multiple selection dropdown with checkboxes, built on top of MUI's Select component and integrated with TanStack Form.
+
+```tsx
+import { useAppForm } from '@cwncollab-org/component-kit'
+import { z } from 'zod'
+
+// Define your form schema
+const formSchema = z.object({
+  categories: z.array(z.string()).min(1, 'Please select at least one category'),
+})
+
+// Define your options
+const categories = [
+  { value: 'tech', label: 'Technology' },
+  { value: 'sports', label: 'Sports' },
+  { value: 'news', label: 'News' },
+  { value: 'entertainment', label: 'Entertainment' },
+  { value: 'science', label: 'Science' },
+]
+
+function MyForm() {
+  const form = useAppForm({
+    defaultValues: {
+      categories: [],
+    },
+    validators: {
+      onSubmit: formSchema,
+    },
+    onSubmit: ({ value }) => {
+      console.log('Selected categories:', value.categories)
+    },
+  })
+
+  return (
+    <form.AppField
+      name="categories"
+      children={field => (
+        <field.MultiSelect
+          label="Categories"
+          required
+          options={categories}
+          labelShrink
+          size="small"
+          fullWidth
+          // Optional: Sort selected values by label or value
+          sortSelected="label"
+        />
+      )}
+    />
+  )
+}
+```
+
+#### MultiSelect Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `label` | `string` | - | The label text for the select field |
+| `labelShrink` | `boolean` | `false` | Whether the label should shrink |
+| `size` | `'small' \| 'medium'` | `'medium'` | The size of the select field |
+| `fullWidth` | `boolean` | `false` | Whether the select should take full width |
+| `options` | `Array<{ value: string, label: string }> \| string[]` | `[]` | The options to display in the select |
+| `sortSelected` | `'label' \| 'value' \| false` | `false` | Sort selected values by label or value |
+| `slotProps` | `object` | - | Props for underlying MUI components |
