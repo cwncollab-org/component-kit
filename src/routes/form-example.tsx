@@ -12,6 +12,7 @@ const formSchema = z.object({
   time: z.date(),
   agree: z.boolean(),
   email: z.string().email().optional(),
+  categories: z.array(z.string()).min(1, 'Please select at least one category'),
 })
 
 type FormValues = z.infer<typeof formSchema>
@@ -26,6 +27,14 @@ const roles = [
   { value: 'guest', label: 'Guest' },
 ]
 
+const categories = [
+  { value: 'tech', label: 'Technology' },
+  { value: 'sports', label: 'Sports' },
+  { value: 'news', label: 'News' },
+  { value: 'entertainment', label: 'Entertainment' },
+  { value: 'science', label: 'Science' },
+]
+
 export function FormExample() {
   const [value, setValue] = useState<FormValues | undefined>(undefined)
   const form = useAppForm({
@@ -35,6 +44,7 @@ export function FormExample() {
       agree: false,
       date: undefined,
       time: undefined,
+      categories: [],
     } as Partial<FormValues>,
     validators: {
       onSubmit: formSchema,
@@ -96,6 +106,21 @@ export function FormExample() {
                   <em>None</em>
                 </MenuItem>
               </field.Select>
+            )}
+          />
+
+          <form.AppField
+            name='categories'
+            children={field => (
+              <field.MultiSelect
+                label='Categories'
+                required
+                options={categories}
+                labelShrink
+                size='small'
+                sortSelected='label'
+                fullWidth
+              />
             )}
           />
 

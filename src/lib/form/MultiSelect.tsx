@@ -8,6 +8,9 @@ import {
   FormHelperText as MuiFormHelperText,
   FormHelperTextProps as MuiFormHelperTextProps,
   MenuItem,
+  Checkbox,
+  ListItemText,
+  OutlinedInput,
 } from '@mui/material'
 import { useFieldContext } from './formContext'
 import { useId, useMemo } from 'react'
@@ -17,13 +20,15 @@ type Option = {
   label: string
 }
 
-export type SelectProps = MuiFormControlProps & {
+type SortBy = 'label' | 'value' | false
+
+export type MultiSelectProps = MuiFormControlProps & {
   label?: string
   labelShrink?: boolean
   size?: 'small' | 'medium'
   fullWidth?: boolean
   options?: Option[] | string[]
-  multiple?: boolean
+  sortSelected?: SortBy
   slotProps?: {
     inputLabel?: Omit<MuiInputLabelProps, 'id'>
     select?: Omit<
@@ -34,16 +39,16 @@ export type SelectProps = MuiFormControlProps & {
   }
 }
 
-export function Select(props: SelectProps) {
-  const field = useFieldContext<string>()
+export function MultiSelect(props: MultiSelectProps) {
+  const field = useFieldContext<string[]>()
   const {
     children,
     slotProps,
     options,
-    multiple,
     labelShrink,
     size,
     fullWidth,
+    sortSelected = false,
     ...rest
   } = props
 
@@ -65,6 +70,27 @@ export function Select(props: SelectProps) {
     return []
   }, [options])
 
+  const getSortedSelectedValues = useMemo(() => {
+    if (!sortSelected) return field.state.value
+
+    const selectedOptions = field.state.value.map(
+      value =>
+        renderedOptions.find(opt => opt.value === value) || {
+          value,
+          label: value,
+        }
+    )
+
+    return selectedOptions
+      .sort((a, b) => {
+        if (sortSelected === 'label') {
+          return a.label.localeCompare(b.label)
+        }
+        return a.value.localeCompare(b.value)
+      })
+      .map(option => option.value)
+  }, [field.state.value, renderedOptions, sortSelected])
+
   return (
     <MuiFormControl error={Boolean(errorText)} fullWidth={fullWidth} {...rest}>
       <MuiInputLabel
@@ -79,17 +105,27 @@ export function Select(props: SelectProps) {
         labelId={labelId}
         notched={labelShrink}
         size={size}
-        multiple={multiple}
+        multiple
+        value={getSortedSelectedValues}
+        onChange={ev => field.handleChange(ev.target.value as string[])}
+        input={<OutlinedInput label={props.label} />}
+        renderValue={selected => {
+          const selectedValues = selected as string[]
+          return selectedValues
+            .map(
+              value =>
+                renderedOptions.find(opt => opt.value === value)?.label || value
+            )
+            .join(', ')
+        }}
         {...slotProps?.select}
-        label={props.label}
         name={field.name}
-        value={field.state.value}
-        onChange={ev => field.handleChange(ev.target.value as string)}
       >
         {children}
         {renderedOptions.map(option => (
           <MenuItem key={option.value} value={option.value}>
-            {option.label}
+            <Checkbox checked={field.state.value.includes(option.value)} />
+            <ListItemText primary={option.label} />
           </MenuItem>
         ))}
       </MuiSelect>

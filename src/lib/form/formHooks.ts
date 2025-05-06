@@ -6,10 +6,18 @@ import { DatePicker } from './DatePicker'
 import { TimePicker } from './TimePicker'
 import { fieldContext, formContext } from './formContext'
 import { SubscribeButton } from './SubscribeButton'
+import { MultiSelect } from './MultiSelect'
 
 export const { useAppForm, withForm } = createFormHook({
   fieldContext,
   formContext,
-  fieldComponents: { TextField, Checkbox, Select, DatePicker, TimePicker },
+  fieldComponents: {
+    TextField,
+    Checkbox,
+    Select,
+    MultiSelect,
+    DatePicker,
+    TimePicker,
+  },
   formComponents: { SubscribeButton },
 })
