@@ -578,7 +578,7 @@ function MyForm() {
 | `options` | `Array<{ value: string, label: string }> \| string[]` | `[]` | The options to display in the select |
 | `sortSelected` | `'label' \| 'value' \| false` | `false` | Sort selected values by label or value |
 | `slotProps` | `object` | - | Props for underlying MUI components |
-```
+
 
 ### Common Dialog Patterns
 
@@ -592,23 +592,20 @@ import { useConfirmDialog } from '@cwncollab-org/component-kit'
 function MyComponent() {
   const confirm = useConfirmDialog()
 
-  const handleDelete = async () => {
+  const handleClick = async () => {
     const result = await confirm({
-      title: 'Delete Item',
-      message: 'Are you sure you want to delete this item? This action cannot be undone.',
-      confirmText: 'Delete',
-      cancelText: 'Cancel',
-      severity: 'error', // Optional: 'error' | 'warning' | 'info' | 'success'
+      title: 'Confirm',
+      message: 'Are you sure you want to add this item to cart?',
     })
 
     if (result) {
-      // Proceed with deletion
+      // Proceed
     }
   }
 
   return (
-    <Button variant='contained' color='error' onClick={handleDelete}>
-      Delete Item
+    <Button onClick={handleClick}>
+      Click
     </Button>
   )
 }
@@ -626,8 +623,6 @@ function MyComponent() {
     const result = await confirmDelete({
       title: 'Delete Item',
       message: 'Are you sure you want to delete this item? This action cannot be undone.',
-      confirmText: 'Delete',
-      cancelText: 'Cancel',
     })
 
     if (result) {
@@ -636,123 +631,9 @@ function MyComponent() {
   }
 
   return (
-    <Button variant='contained' color='error' onClick={handleDelete}>
+    <Button onClick={handleDelete}>
       Delete Item
     </Button>
   )
 }
 ```
-
-#### Form Dialog
-
-```tsx
-import { Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material'
-import { useAppForm } from '@cwncollab-org/component-kit'
-import { z } from 'zod'
-
-const formSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  email: z.string().email('Invalid email'),
-})
-
-type FormValues = z.infer<typeof formSchema>
-
-function FormDialog({ open, onClose, onSubmit }: DialogProps) {
-  const form = useAppForm({
-    defaultValues: {
-      name: '',
-      email: '',
-    },
-    validators: { onChange: formSchema },
-    onSubmit: ({ value }) => {
-      onSubmit(value)
-      onClose()
-    },
-  })
-
-  return (
-    <Dialog open={open} onClose={onClose}>
-      <DialogTitle>Add New User</DialogTitle>
-      <DialogContent>
-        <form.AppField
-          name='name'
-          children={field => (
-            <field.TextField 
-              label='Name' 
-              fullWidth 
-              sx={{ mt: 2 }}
-            />
-          )}
-        />
-        <form.AppField
-          name='email'
-          children={field => (
-            <field.TextField 
-              label='Email' 
-              fullWidth 
-              sx={{ mt: 2 }}
-            />
-          )}
-        />
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose}>Cancel</Button>
-        <Button onClick={form.handleSubmit} variant='contained'>
-          Save
-        </Button>
-      </DialogActions>
-    </Dialog>
-  )
-}
-```
-
-#### Alert Dialog
-
-```tsx
-import { Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button } from '@mui/material'
-import { DialogProps } from '@cwncollab-org/component-kit'
-
-function AlertDialog({ open, onClose, title, message, severity = 'info' }: DialogProps & {
-  title: string
-  message: string
-  severity?: 'error' | 'warning' | 'info' | 'success'
-}) {
-  return (
-    <Dialog open={open} onClose={onClose}>
-      <DialogTitle>{title}</DialogTitle>
-      <DialogContent>
-        <DialogContentText color={severity}>
-          {message}
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} variant='contained'>
-          OK
-        </Button>
-      </DialogActions>
-    </Dialog>
-  )
-}
-```
-
-#### Loading Dialog
-
-```tsx
-import { Dialog, DialogContent, CircularProgress, Typography } from '@mui/material'
-import { DialogProps } from '@cwncollab-org/component-kit'
-
-function LoadingDialog({ open, message = 'Loading...' }: DialogProps & {
-  message?: string
-}) {
-  return (
-    <Dialog open={open} PaperProps={{ sx: { bgcolor: 'transparent', boxShadow: 'none' } }}>
-      <DialogContent sx={{ textAlign: 'center' }}>
-        <CircularProgress />
-        <Typography sx={{ mt: 2 }}>{message}</Typography>
-      </DialogContent>
-    </Dialog>
-  )
-}
-```
-
-These dialog patterns can be combined and customized to fit your specific needs. The component kit provides the foundation for building consistent and type-safe dialogs across your application.
