@@ -1,11 +1,10 @@
-import { createFileRoute } from '@tanstack/react-router'
 import { Box, Button, Input, Paper, Stack, Typography } from '@mui/material'
-import { useDialogs } from '../lib'
+import { createFileRoute } from '@tanstack/react-router'
+import { lazy, useState } from 'react'
 import ExampleDialog from '../examples/ExampleDialog'
 import ExampleDialogWithPayload from '../examples/ExampleDialogWithPayload'
 import ExampleDialogWithResult from '../examples/ExampleDialogWithResult'
-import { lazy, useState } from 'react'
-
+import { useConfirmDialog, useDialogs, useConfirmDeleteDialog } from '../lib'
 export const Route = createFileRoute('/dialogs-example')({
   component: DialogsExample,
 })
@@ -16,12 +15,43 @@ export function DialogsExample() {
   const { openDialog, dialogs } = useDialogs()
   const [name, setName] = useState('')
   const [result, setResult] = useState('')
-
+  const confirm = useConfirmDialog()
+  const confirmDelete = useConfirmDeleteDialog()
   return (
     <Stack spacing={2}>
       <Box>
         <Typography variant='body1'>Dialog count: {dialogs.length}</Typography>
       </Box>
+      <Paper sx={{ p: 2 }}>
+        <Button
+          variant='contained'
+          onClick={async () => {
+            const result = await confirm({
+              title: 'Confirm',
+              message: 'Are you sure you want to confirm?',
+              confirmText: 'Confirm',
+              cancelText: 'Cancel',
+            })
+            console.log(result)
+          }}
+        >
+          Confirm
+        </Button>
+        <Button
+          variant='contained'
+          onClick={async () => {
+            const result = await confirmDelete({
+              title: 'Confirm Delete',
+              message: 'Are you sure you want to delete this item?',
+              confirmText: 'Delete',
+              cancelText: 'Cancel',
+            })
+            console.log(result)
+          }}
+        >
+          Confirm Delete
+        </Button>
+      </Paper>
       <Paper sx={{ p: 2 }}>
         <Typography variant='h6'>Example dialog</Typography>
         <Button
