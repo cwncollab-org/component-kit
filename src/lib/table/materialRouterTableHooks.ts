@@ -14,7 +14,6 @@ import {
   useMaterialReactTable,
   type MRT_TableOptions,
 } from 'material-react-table'
-import cloneDeep from 'clone-deep'
 
 const defaultPageSize = 10
 const defaultDensity = 'compact'
