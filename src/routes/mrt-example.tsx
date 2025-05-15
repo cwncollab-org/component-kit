@@ -1,8 +1,6 @@
 import { createFileRoute } from '@tanstack/react-router'
 import { useMaterialRouterTable } from '../lib'
 import { MaterialReactTable } from 'material-react-table'
-import cloneDeep from 'clone-deep'
-import { useMemo } from 'react'
 
 const columns = [
   {
