@@ -28,6 +28,11 @@ const navList: NavList = {
       label: 'Tabs Example',
       url: '/tabs-example',
     },
+    {
+      icon: <Form />,
+      label: 'MRT Example',
+      url: '/mrt-example',
+    },
   ],
 }
 

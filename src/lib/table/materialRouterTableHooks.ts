@@ -1,5 +1,4 @@
-import { PaginationState, SortingState } from '@tanstack/react-table'
-import { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import {
   useNavigate,
   useSearch,
@@ -8,13 +7,18 @@ import {
 import { z } from 'zod'
 import {
   MRT_DensityState,
+  MRT_PaginationState,
   MRT_RowData,
+  MRT_SortingState,
+  MRT_VisibilityState,
   useMaterialReactTable,
   type MRT_TableOptions,
 } from 'material-react-table'
+import cloneDeep from 'clone-deep'
 
 const defaultPageSize = 10
 const defaultDensity = 'compact'
+const searchColumnsSeparator = '-'
 
 export const tableSearchSchema = z.object({
   page: z.number().optional(),
@@ -22,6 +26,10 @@ export const tableSearchSchema = z.object({
   order: z.string().optional(),
   desc: z.boolean().optional(),
   density: z.enum(['compact', 'spacious', 'comfortable']).optional(),
+  columns: z
+    .string()
+    .transform(val => val.split(searchColumnsSeparator))
+    .optional(),
 })
 
 export type TableSearch = z.infer<typeof tableSearchSchema>
@@ -31,27 +39,43 @@ export function useMaterialRouterTable<TData extends MRT_RowData>(
   opts: MRT_TableOptions<TData>
 ) {
   const {
-    initialState,
     onPaginationChange,
     onSortingChange,
     onDensityChange,
     state,
     ...rest
   } = opts
+
+  const initialState = opts.initialState
   const search = tableSearchSchema.parse(useSearch({ strict: false }))
   const navigate = useNavigate({ from: path })
 
-  const initialPaginationState: PaginationState = {
+  const initialPaginationState: MRT_PaginationState = {
     pageIndex: initialState?.pagination?.pageIndex ?? 0,
     pageSize: initialState?.pagination?.pageSize ?? defaultPageSize,
   }
 
-  const initialSortingState: SortingState = initialState?.sorting ?? []
+  const initialSortingState: MRT_SortingState = initialState?.sorting ?? []
 
   const initialDensityState: MRT_DensityState =
     initialState?.density ?? defaultDensity
 
-  const searchPaginationState: PaginationState = {
+  const initialColumnVisibilityState = initialState?.columnVisibility ?? {}
+  const initialVisibleColumns = useMemo(
+    () =>
+      opts.columns
+        .map<string | undefined>(column => column.accessorKey)
+        .filter(column => column !== undefined)
+        .filter(
+          column =>
+            initialColumnVisibilityState[column] === undefined ||
+            initialColumnVisibilityState[column] === true
+        )
+        .join(searchColumnsSeparator),
+    [opts.columns, initialColumnVisibilityState]
+  )
+
+  const searchPaginationState: MRT_PaginationState = {
     pageIndex: search.page ? search.page - 1 : 0,
     pageSize: search.pageSize ?? defaultPageSize,
   }
@@ -59,20 +83,46 @@ export function useMaterialRouterTable<TData extends MRT_RowData>(
   const searchDensityState: MRT_DensityState =
     search.density ?? initialDensityState
 
-  const searchSortingState: SortingState = search.order
+  const searchSortingState: MRT_SortingState = search.order
     ? [{ id: search.order, desc: search.desc ?? false }]
-    : []
+    : initialSortingState
 
-  const [pagination, setPagination] = useState<PaginationState>(
+  const searchColumnVisibilityState: MRT_VisibilityState = useMemo(() => {
+    return search.columns
+      ? opts.columns.reduce((acc, column) => {
+          const accessorKey = column.accessorKey
+          if (!accessorKey) return acc
+          acc[accessorKey] = search.columns?.includes(accessorKey) ?? false
+          return acc
+        }, initialColumnVisibilityState)
+      : initialColumnVisibilityState
+  }, [opts.columns, initialColumnVisibilityState, search.columns])
+
+  const [pagination, setPagination] = useState<MRT_PaginationState>(
     searchPaginationState
   )
-  const [sorting, setSorting] = useState<SortingState>(searchSortingState)
+  const [sorting, setSorting] = useState<MRT_SortingState>(searchSortingState)
   const [density, setDensity] = useState<MRT_DensityState>(searchDensityState)
+  const [columnVisibility, setColumnVisibility] = useState<MRT_VisibilityState>(
+    searchColumnVisibilityState
+  )
 
   useEffect(() => {
     const singleSorting = sorting[0]
     const order = singleSorting ? singleSorting.id : undefined
     const desc = singleSorting?.desc
+
+    const searchColumns = search.columns?.join(searchColumnsSeparator)
+
+    const nextVisibleColumns = opts.columns
+      .map<string | undefined>(column => column.accessorKey)
+      .filter(column => column !== undefined)
+      .filter(
+        column =>
+          columnVisibility[column] === undefined ||
+          columnVisibility[column] === true
+      )
+      .join(searchColumnsSeparator)
 
     const nextSearch = {
       page:
@@ -86,6 +136,10 @@ export function useMaterialRouterTable<TData extends MRT_RowData>(
       order,
       desc: desc ? true : undefined,
       density: density === initialDensityState ? undefined : density,
+      columns:
+        nextVisibleColumns === initialVisibleColumns
+          ? undefined
+          : nextVisibleColumns,
     }
 
     if (
@@ -93,7 +147,8 @@ export function useMaterialRouterTable<TData extends MRT_RowData>(
       search.pageSize !== nextSearch.pageSize ||
       search.order !== nextSearch.order ||
       search.desc !== nextSearch.desc ||
-      search.density !== nextSearch.density
+      search.density !== nextSearch.density ||
+      searchColumns !== nextSearch.columns
     ) {
       navigate({
         replace: true,
@@ -101,7 +156,14 @@ export function useMaterialRouterTable<TData extends MRT_RowData>(
         search: nextSearch,
       })
     }
-  }, [navigate, pagination, sorting, density])
+  }, [
+    navigate,
+    initialVisibleColumns,
+    pagination,
+    sorting,
+    density,
+    columnVisibility,
+  ])
 
   return useMaterialReactTable({
     onPaginationChange: state => {
@@ -116,18 +178,19 @@ export function useMaterialRouterTable<TData extends MRT_RowData>(
       setDensity(state)
       onDensityChange?.(state)
     },
+    onColumnVisibilityChange: state => {
+      setColumnVisibility(state)
+    },
     ...rest,
     initialState: {
       ...initialState,
-      pagination: initialPaginationState,
-      sorting: initialSortingState,
-      density: initialDensityState,
     },
     state: {
       ...state,
       pagination,
       sorting,
       density,
+      columnVisibility,
     },
   })
 }

@@ -12,6 +12,7 @@
 
 import { Route as rootRoute } from './routes/__root'
 import { Route as TabsExampleImport } from './routes/tabs-example'
+import { Route as MrtExampleImport } from './routes/mrt-example'
 import { Route as LayoutExampleImport } from './routes/layout-example'
 import { Route as FormExampleImport } from './routes/form-example'
 import { Route as DialogsExampleImport } from './routes/dialogs-example'
@@ -25,6 +26,12 @@ import { Route as TabsExampleTab1Import } from './routes/tabs-example/tab1'
 const TabsExampleRoute = TabsExampleImport.update({
   id: '/tabs-example',
   path: '/tabs-example',
+  getParentRoute: () => rootRoute,
+} as any)
+
+const MrtExampleRoute = MrtExampleImport.update({
+  id: '/mrt-example',
+  path: '/mrt-example',
   getParentRoute: () => rootRoute,
 } as any)
 
@@ -102,6 +109,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LayoutExampleImport
       parentRoute: typeof rootRoute
     }
+    '/mrt-example': {
+      id: '/mrt-example'
+      path: '/mrt-example'
+      fullPath: '/mrt-example'
+      preLoaderRoute: typeof MrtExampleImport
+      parentRoute: typeof rootRoute
+    }
     '/tabs-example': {
       id: '/tabs-example'
       path: '/tabs-example'
@@ -156,6 +170,7 @@ export interface FileRoutesByFullPath {
   '/dialogs-example': typeof DialogsExampleRoute
   '/form-example': typeof FormExampleRoute
   '/layout-example': typeof LayoutExampleRoute
+  '/mrt-example': typeof MrtExampleRoute
   '/tabs-example': typeof TabsExampleRouteWithChildren
   '/tabs-example/tab1': typeof TabsExampleTab1Route
   '/tabs-example/tab2': typeof TabsExampleTab2Route
@@ -167,6 +182,7 @@ export interface FileRoutesByTo {
   '/dialogs-example': typeof DialogsExampleRoute
   '/form-example': typeof FormExampleRoute
   '/layout-example': typeof LayoutExampleRoute
+  '/mrt-example': typeof MrtExampleRoute
   '/tabs-example/tab1': typeof TabsExampleTab1Route
   '/tabs-example/tab2': typeof TabsExampleTab2Route
   '/tabs-example': typeof TabsExampleIndexRoute
@@ -178,6 +194,7 @@ export interface FileRoutesById {
   '/dialogs-example': typeof DialogsExampleRoute
   '/form-example': typeof FormExampleRoute
   '/layout-example': typeof LayoutExampleRoute
+  '/mrt-example': typeof MrtExampleRoute
   '/tabs-example': typeof TabsExampleRouteWithChildren
   '/tabs-example/tab1': typeof TabsExampleTab1Route
   '/tabs-example/tab2': typeof TabsExampleTab2Route
@@ -191,6 +208,7 @@ export interface FileRouteTypes {
     | '/dialogs-example'
     | '/form-example'
     | '/layout-example'
+    | '/mrt-example'
     | '/tabs-example'
     | '/tabs-example/tab1'
     | '/tabs-example/tab2'
@@ -201,6 +219,7 @@ export interface FileRouteTypes {
     | '/dialogs-example'
     | '/form-example'
     | '/layout-example'
+    | '/mrt-example'
     | '/tabs-example/tab1'
     | '/tabs-example/tab2'
     | '/tabs-example'
@@ -210,6 +229,7 @@ export interface FileRouteTypes {
     | '/dialogs-example'
     | '/form-example'
     | '/layout-example'
+    | '/mrt-example'
     | '/tabs-example'
     | '/tabs-example/tab1'
     | '/tabs-example/tab2'
@@ -222,6 +242,7 @@ export interface RootRouteChildren {
   DialogsExampleRoute: typeof DialogsExampleRoute
   FormExampleRoute: typeof FormExampleRoute
   LayoutExampleRoute: typeof LayoutExampleRoute
+  MrtExampleRoute: typeof MrtExampleRoute
   TabsExampleRoute: typeof TabsExampleRouteWithChildren
 }
 
@@ -230,6 +251,7 @@ const rootRouteChildren: RootRouteChildren = {
   DialogsExampleRoute: DialogsExampleRoute,
   FormExampleRoute: FormExampleRoute,
   LayoutExampleRoute: LayoutExampleRoute,
+  MrtExampleRoute: MrtExampleRoute,
   TabsExampleRoute: TabsExampleRouteWithChildren,
 }
 
@@ -247,6 +269,7 @@ export const routeTree = rootRoute
         "/dialogs-example",
         "/form-example",
         "/layout-example",
+        "/mrt-example",
         "/tabs-example"
       ]
     },
@@ -261,6 +284,9 @@ export const routeTree = rootRoute
     },
     "/layout-example": {
       "filePath": "layout-example.tsx"
+    },
+    "/mrt-example": {
+      "filePath": "mrt-example.tsx"
     },
     "/tabs-example": {
       "filePath": "tabs-example.tsx",
