@@ -1,6 +1,5 @@
 import {
   Box,
-  Chip,
   IconButton,
   AppBar as MuiAppBar,
   SxProps,
