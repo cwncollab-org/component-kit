@@ -1,7 +1,7 @@
 import { Person } from '@mui/icons-material'
 import Form from '@mui/icons-material/Article'
 import Home from '@mui/icons-material/Home'
-import { IconButton } from '@mui/material'
+import { IconButton, MenuItem, Typography } from '@mui/material'
 import { createRootRoute, Outlet } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import { AppLayout, NavList } from '../lib/layout'
@@ -34,17 +34,14 @@ const navList: NavList = {
 export const Route = createRootRoute({
   component: () => (
     <AppLayout
-      title='Demo App'
+      title={<Typography variant='h6'>Demo App</Typography>}
+      menuItems={[
+        <MenuItem key='logout' onClick={() => {}}>
+          Logout
+        </MenuItem>,
+      ]}
       navList={navList}
-      slotProps={{
-        appBar: {
-          endSlot: (
-            <IconButton color='inherit' aria-label='search' onClick={() => {}}>
-              <Person />
-            </IconButton>
-          ),
-        },
-      }}
+      slotProps={{}}
     >
       <Outlet />
       <TanStackRouterDevtools />

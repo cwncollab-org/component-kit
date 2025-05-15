@@ -8,29 +8,33 @@ import {
   Typography,
 } from '@mui/material'
 import { Menu as MenuIcon } from '@mui/icons-material'
+import { AppBarMenu } from './AppBarMenu'
 
 export type AppBarProps = {
   title?: string | React.ReactNode
-  status?: string
+  status?: string | React.ReactNode
   sidebarOpen: boolean
   drawerWidth: number
   collapsedDrawerWidth: number
   onDrawerToggle: () => void
   endSlot?: React.ReactNode
+  menuItems?: React.ReactNode[]
   sx?: SxProps
 }
 
 export function AppBar(props: AppBarProps) {
   const {
     title,
-    status,
     sidebarOpen,
     drawerWidth,
     collapsedDrawerWidth,
     onDrawerToggle,
     endSlot,
+    menuItems,
     sx,
   } = props
+
+  const renderedEndSlot = endSlot ?? <AppBarMenu menuItems={menuItems} />
 
   return (
     <MuiAppBar
@@ -59,20 +63,11 @@ export function AppBar(props: AppBarProps) {
         {typeof title === 'string' ? (
           <Typography variant='h6' noWrap component='div' sx={{ flexGrow: 1 }}>
             {title}
-            {status && (
-              <Chip
-                label={status}
-                size='small'
-                color='warning'
-                variant='filled'
-                sx={{ ml: 1 }}
-              />
-            )}
           </Typography>
         ) : (
           <Box sx={{ flexGrow: 1 }}>{title}</Box>
         )}
-        {endSlot && <Box>{endSlot}</Box>}
+        {renderedEndSlot && <Box>{renderedEndSlot}</Box>}
       </Toolbar>
     </MuiAppBar>
   )

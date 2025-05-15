@@ -22,7 +22,7 @@ const defaultDrawerWidth = 240
 const defaultCollapsedDrawerWidth = 64
 
 export type AppLayoutProps = PropsWithChildren & {
-  title?: string
+  title?: string | React.ReactNode
   navList?: NavList | NavList[]
   drawerWidth?: number
   collapsedDrawerWidth?: number
@@ -37,6 +37,7 @@ export type AppLayoutProps = PropsWithChildren & {
       | 'onDrawerToggle'
     >
   }
+  menuItems?: React.ReactNode[]
   sx?: SxProps
 }
 
@@ -48,6 +49,7 @@ export function AppLayout(props: AppLayoutProps) {
     collapsedDrawerWidth = defaultCollapsedDrawerWidth,
     children,
     slotProps,
+    menuItems,
     sx,
   } = props
 
@@ -140,6 +142,7 @@ export function AppLayout(props: AppLayoutProps) {
         drawerWidth={drawerWidth}
         collapsedDrawerWidth={collapsedDrawerWidth}
         onDrawerToggle={handleDrawerToggle}
+        menuItems={menuItems}
       />
       <Box
         component='nav'
