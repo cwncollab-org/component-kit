@@ -5,6 +5,7 @@ import { IconButton, MenuItem, Typography } from '@mui/material'
 import { createRootRoute, Outlet } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import { AppLayout, NavList } from '../lib/layout'
+import { useState } from 'react'
 
 const navList: NavList = {
   items: [
@@ -37,19 +38,41 @@ const navList: NavList = {
 }
 
 export const Route = createRootRoute({
-  component: () => (
+  component: RouteComponent,
+})
+
+function RouteComponent() {
+  const [menuOpen, setMenuOpen] = useState(true)
+
+  const handleMenuOpenChange = (open: boolean) => {
+    setMenuOpen(open)
+  }
+
+  return (
     <AppLayout
       title={<Typography variant='h6'>Demo App</Typography>}
       menuItems={[
-        <MenuItem key='logout' onClick={() => {}}>
+        <MenuItem
+          key='logout'
+          onClick={() => {
+            setMenuOpen(false)
+          }}
+        >
           Logout
         </MenuItem>,
       ]}
       navList={navList}
       slotProps={{}}
+      initialState={{
+        menuOpen: true,
+      }}
+      state={{
+        menuOpen,
+        onMenuOpenChange: handleMenuOpenChange,
+      }}
     >
       <Outlet />
       <TanStackRouterDevtools />
     </AppLayout>
-  ),
-})
+  )
+}

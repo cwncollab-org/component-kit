@@ -15,11 +15,14 @@ import { ChevronRight } from '@mui/icons-material'
 import { useState } from 'react'
 import { ChevronLeft } from '@mui/icons-material'
 import { Link } from '@tanstack/react-router'
-import { AppBar, AppBarProps } from './AppBar'
+import { AppBar, AppBarInitialState, AppBarProps, AppBarState } from './AppBar'
 import { NavList } from './types'
 
 const defaultDrawerWidth = 240
 const defaultCollapsedDrawerWidth = 64
+
+export type AppLayoutState = AppBarState
+export type AppLayoutInitialState = AppBarInitialState
 
 export type AppLayoutProps = PropsWithChildren & {
   title?: string | React.ReactNode
@@ -38,6 +41,8 @@ export type AppLayoutProps = PropsWithChildren & {
     >
   }
   menuItems?: React.ReactNode[]
+  initialState?: AppLayoutInitialState
+  state?: AppLayoutState
   sx?: SxProps
 }
 
@@ -50,6 +55,8 @@ export function AppLayout(props: AppLayoutProps) {
     children,
     slotProps,
     menuItems,
+    initialState,
+    state,
     sx,
   } = props
 
@@ -143,6 +150,8 @@ export function AppLayout(props: AppLayoutProps) {
         collapsedDrawerWidth={collapsedDrawerWidth}
         onDrawerToggle={handleDrawerToggle}
         menuItems={menuItems}
+        initialState={initialState}
+        state={state}
       />
       <Box
         component='nav'

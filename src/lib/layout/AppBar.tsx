@@ -7,7 +7,14 @@ import {
   Typography,
 } from '@mui/material'
 import { Menu as MenuIcon } from '@mui/icons-material'
-import { AppBarMenu } from './AppBarMenu'
+import {
+  AppBarMenu,
+  AppBarMenuInitialState,
+  AppBarMenuState,
+} from './AppBarMenu'
+
+export type AppBarState = AppBarMenuState
+export type AppBarInitialState = AppBarMenuInitialState
 
 export type AppBarProps = {
   title?: string | React.ReactNode
@@ -18,6 +25,8 @@ export type AppBarProps = {
   onDrawerToggle: () => void
   endSlot?: React.ReactNode
   menuItems?: React.ReactNode[]
+  initialState?: AppBarInitialState
+  state?: AppBarState
   sx?: SxProps
 }
 
@@ -30,10 +39,18 @@ export function AppBar(props: AppBarProps) {
     onDrawerToggle,
     endSlot,
     menuItems,
+    initialState,
+    state,
     sx,
   } = props
 
-  const renderedEndSlot = endSlot ?? <AppBarMenu menuItems={menuItems} />
+  const renderedEndSlot = endSlot ?? (
+    <AppBarMenu
+      menuItems={menuItems}
+      initialState={initialState}
+      state={state}
+    />
+  )
 
   return (
     <MuiAppBar

@@ -1,31 +1,58 @@
 import { Avatar, IconButton, Menu } from '@mui/material'
-import { useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 import { Person as PersonIcon } from '@mui/icons-material'
 
-type AppBarMenuProps = {
+export type AppBarMenuState = {
+  menuOpen: boolean
+  onMenuOpenChange?: (open: boolean) => void
+}
+
+export type AppBarMenuInitialState = Pick<AppBarMenuState, 'menuOpen'>
+
+export type AppBarMenuProps = {
   menuItems?: React.ReactNode[]
+  initialState?: AppBarMenuInitialState
+  state?: AppBarMenuState
 }
 
 export function AppBarMenu(props: AppBarMenuProps) {
-  const { menuItems } = props
+  const { menuItems, initialState, state } = props
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null)
-  const open = Boolean(anchorEl)
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget)
+  const [_menuOpen, setMenuOpen] = useState(initialState?.menuOpen ?? false)
+
+  const buttonRef = useRef<HTMLButtonElement>(null)
+
+  const menuOpen = state?.menuOpen ?? _menuOpen
+
+  useLayoutEffect(() => {
+    if (buttonRef.current) {
+      setAnchorEl(buttonRef.current)
+    }
+  }, [buttonRef.current])
+
+  const handleClick = () => {
+    setMenuOpen(true)
+    state?.onMenuOpenChange?.(true)
   }
   const handleClose = () => {
-    setAnchorEl(null)
+    setMenuOpen(false)
+    state?.onMenuOpenChange?.(false)
   }
 
   return (
     <div>
-      <IconButton color='inherit' aria-label='search' onClick={handleClick}>
+      <IconButton
+        ref={buttonRef}
+        color='inherit'
+        aria-label='search'
+        onClick={handleClick}
+      >
         <Avatar sx={{ width: 32, height: 32 }}>
           <PersonIcon />
         </Avatar>
       </IconButton>
       {menuItems && (
-        <Menu open={open} onClose={handleClose} anchorEl={anchorEl}>
+        <Menu open={menuOpen} onClose={handleClose} anchorEl={anchorEl}>
           {menuItems}
         </Menu>
       )}
