@@ -41,6 +41,7 @@ export function useMaterialRouterTable<TData extends MRT_RowData>(
     onPaginationChange,
     onSortingChange,
     onDensityChange,
+    onColumnVisibilityChange,
     state,
     ...rest
   } = opts
@@ -179,6 +180,7 @@ export function useMaterialRouterTable<TData extends MRT_RowData>(
     },
     onColumnVisibilityChange: state => {
       setColumnVisibility(state)
+      onColumnVisibilityChange?.(state)
     },
     ...rest,
     initialState: {
