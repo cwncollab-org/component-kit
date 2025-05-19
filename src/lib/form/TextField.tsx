@@ -25,7 +25,7 @@ export function TextField(props: TextFieldProps) {
       value={field.state.value ?? ''}
       onBlur={field.handleBlur}
       onChange={e =>
-        field.handleChange(e.target.value === '' ? undefined : e.target.value)
+        field.handleChange(e.target.value === '' ? null : e.target.value)
       }
       slotProps={{
         inputLabel: { shrink: labelShrink },

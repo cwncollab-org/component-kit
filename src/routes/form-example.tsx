@@ -39,7 +39,7 @@ export function FormExample() {
   const [value, setValue] = useState<FormValues | undefined>(undefined)
   const form = useAppForm({
     defaultValues: {
-      username: '',
+      username: 'default',
       role: undefined,
       agree: false,
       date: undefined,
