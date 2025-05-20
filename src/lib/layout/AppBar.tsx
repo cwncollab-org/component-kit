@@ -22,6 +22,7 @@ export type AppBarProps = {
   sidebarOpen: boolean
   drawerWidth: number
   collapsedDrawerWidth: number
+  dense?: boolean
   onDrawerToggle: () => void
   endSlot?: React.ReactNode
   menuItems?: React.ReactNode[]
@@ -36,6 +37,7 @@ export function AppBar(props: AppBarProps) {
     sidebarOpen,
     drawerWidth,
     collapsedDrawerWidth,
+    dense,
     onDrawerToggle,
     endSlot,
     menuItems,
@@ -66,7 +68,7 @@ export function AppBar(props: AppBarProps) {
         transition: 'width 0.2s, margin-left 0.2s',
       }}
     >
-      <Toolbar variant='dense'>
+      <Toolbar variant={dense ? 'dense' : 'regular'}>
         <IconButton
           color='inherit'
           aria-label='open drawer'

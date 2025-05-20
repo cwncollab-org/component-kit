@@ -30,6 +30,7 @@ export type AppLayoutProps = PropsWithChildren & {
   navList?: NavList | NavList[]
   drawerWidth?: number
   collapsedDrawerWidth?: number
+  dense?: boolean
   slotProps?: {
     appBar?: Omit<
       AppBarProps,
@@ -54,6 +55,7 @@ export function AppLayout(props: AppLayoutProps) {
     navList = [],
     drawerWidth = defaultDrawerWidth,
     collapsedDrawerWidth = defaultCollapsedDrawerWidth,
+    dense,
     children,
     slotProps,
     menuItems,
@@ -83,6 +85,7 @@ export function AppLayout(props: AppLayoutProps) {
       return (
         <div>
           <Toolbar
+            variant={dense ? 'dense' : 'regular'}
             sx={{
               justifyContent: expanded ? 'flex-end' : 'center',
               display: { xs: 'none', sm: 'flex' },
@@ -100,7 +103,7 @@ export function AppLayout(props: AppLayoutProps) {
     }
 
     const renderNavList = (expanded: boolean, navList: NavList) => (
-      <List {...slotProps?.list}>
+      <List dense={dense} {...slotProps?.list}>
         {navList.items.map((item, index) => (
           <ListItem
             disablePadding
@@ -145,6 +148,7 @@ export function AppLayout(props: AppLayoutProps) {
   return (
     <Box sx={{ display: 'flex', ...sx }}>
       <AppBar
+        dense={dense}
         {...slotProps?.appBar}
         title={title}
         sidebarOpen={sidebarOpen}
@@ -205,11 +209,12 @@ export function AppLayout(props: AppLayoutProps) {
               sidebarOpen ? drawerWidth : collapsedDrawerWidth
             }px)`,
           },
-          mt: '48px',
+
           transition: 'width 0.2s',
           overflowX: 'hidden',
         }}
       >
+        <Toolbar variant={dense ? 'dense' : 'regular'} />
         {children}
       </Box>
     </Box>

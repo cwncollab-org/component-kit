@@ -58,6 +58,7 @@ function RouteComponent() {
       menuItems={[
         <MenuItem
           key='logout'
+          dense
           onClick={() => {
             setMenuOpen(false)
           }}
@@ -66,11 +67,8 @@ function RouteComponent() {
         </MenuItem>,
       ]}
       navList={navList}
-      slotProps={{
-        list: {
-          dense: true,
-        },
-      }}
+      dense
+      slotProps={{}}
       initialState={{
         menuOpen: true,
       }}
