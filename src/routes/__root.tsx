@@ -1,7 +1,6 @@
-import { Person } from '@mui/icons-material'
 import Form from '@mui/icons-material/Article'
 import Home from '@mui/icons-material/Home'
-import { IconButton, MenuItem, Typography } from '@mui/material'
+import { MenuItem, Typography } from '@mui/material'
 import { createRootRoute, Outlet } from '@tanstack/react-router'
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools'
 import { AppLayout, NavList } from '../lib/layout'
@@ -13,6 +12,11 @@ const navList: NavList = {
       icon: <Home />,
       label: 'Home',
       url: '/',
+    },
+    {
+      icon: <Form />,
+      label: 'Layout Example',
+      url: '/layout-example',
     },
     {
       icon: <Form />,
@@ -42,7 +46,7 @@ export const Route = createRootRoute({
 })
 
 function RouteComponent() {
-  const [menuOpen, setMenuOpen] = useState(true)
+  const [menuOpen, setMenuOpen] = useState(false)
 
   const handleMenuOpenChange = (open: boolean) => {
     setMenuOpen(open)
@@ -62,7 +66,11 @@ function RouteComponent() {
         </MenuItem>,
       ]}
       navList={navList}
-      slotProps={{}}
+      slotProps={{
+        list: {
+          dense: true,
+        },
+      }}
       initialState={{
         menuOpen: true,
       }}

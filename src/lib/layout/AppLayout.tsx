@@ -7,6 +7,7 @@ import {
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  ListProps,
   SxProps,
   Toolbar,
 } from '@mui/material'
@@ -39,6 +40,7 @@ export type AppLayoutProps = PropsWithChildren & {
       | 'collapsedDrawerWidth'
       | 'onDrawerToggle'
     >
+    list?: ListProps
   }
   menuItems?: React.ReactNode[]
   initialState?: AppLayoutInitialState
@@ -98,17 +100,17 @@ export function AppLayout(props: AppLayoutProps) {
     }
 
     const renderNavList = (expanded: boolean, navList: NavList) => (
-      <List>
+      <List {...slotProps?.list}>
         {navList.items.map((item, index) => (
           <ListItem
             disablePadding
             key={index}
-            sx={{ height: '3rem', justifyContent: 'center' }}
+            sx={{ justifyContent: 'center' }}
           >
             <ListItemButton
               component={item.url ? Link : 'div'}
               to={item.url}
-              sx={{ height: '3rem', justifyContent: 'center' }}
+              sx={{ justifyContent: 'center' }}
             >
               <ListItemIcon
                 sx={{
